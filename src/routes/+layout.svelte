@@ -5,9 +5,9 @@
 
 <ModeWatcher />
 
-<div class="bg-background relative flex min-h-screen flex-col" id="page" data-vaul-drawer-wrapper>
+<div class="relative flex min-h-screen flex-col" id="page" data-vaul-drawer-wrapper>
 	<!-- <SiteHeader /> -->
-	<div class="flex-1">
+	<div class="mt-8 md:mt-12">
 		<slot />
 	</div>
 	<!-- <SiteFooter /> -->
