@@ -5,5 +5,7 @@
 </script>
 
 <div class="mx-auto max-w-sm">
+
+
 	<SettingsForm form={data.form} />
 </div>
