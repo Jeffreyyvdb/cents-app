@@ -1,16 +1,16 @@
 <script>
 	import { ModeWatcher } from 'mode-watcher';
 	import '../app.pcss';
-	import Navigation from '$lib/components/navigation/navigation.svelte';
-
+	import SiteHeader from '$lib/components/site-header.svelte';
+	import SiteFooter from '$lib/components/site-footer.svelte';
 </script>
 
 <ModeWatcher />
 
-<div class="relative flex min-h-screen flex-col" id="page" data-vaul-drawer-wrapper>
-	<Navigation/>
-	<div class="mt-8 md:mt-12">
+<div class="relative flex min-h-screen flex-col bg-background" id="page" data-vaul-wrapper>
+	<SiteHeader />
+	<div class="flex-1">
 		<slot />
 	</div>
-	<!-- <SiteFooter /> -->
+	<SiteFooter />
 </div>
