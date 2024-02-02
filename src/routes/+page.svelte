@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import * as Select from '$lib/components/ui/select';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
 	import { onMount } from 'svelte';
 	import { siteConfig } from '$lib/config/site';
 	import * as Table from '$lib/components/ui/table';
