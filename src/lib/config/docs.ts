@@ -12,8 +12,8 @@ export const docsConfig: DocsConfig = {
 			href: '/'
 		},
 		{
-			title: 'Portfolios',
-			href: '/portfolios'
+			title: 'Wallets',
+			href: '/wallets'
 		},
 		{
 			title: 'Settings',

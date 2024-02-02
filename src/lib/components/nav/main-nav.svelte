@@ -24,13 +24,13 @@
 		</a>
 
 		<a
-			href="/portfolios"
+			href="/wallets"
 			class={cn(
 				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/portfolios') ? 'text-foreground' : 'text-foreground/60'
+				$page.url.pathname.startsWith('/wallets') ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Portfolios
+			Wallets
 		</a>
 		<a
 			href="/settings"

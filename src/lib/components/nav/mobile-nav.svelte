@@ -5,6 +5,7 @@
 	import { siteConfig } from '$lib/config/site';
 	import { Icons } from '../icons';
 	import MobileLink from './mobile-link.svelte';
+	import * as Avatar from '../ui/avatar';
 
 	let open = false;
 </script>
@@ -25,8 +26,21 @@
 			<Icons.logo class="mr-2 h-4 w-4" />
 			<span class="font-title text-2xl">{siteConfig.name}</span>
 		</MobileLink>
-		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto pb-10 pl-6">
+		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
+				<a href="/profile" class="flex justify-between">
+					<span>Jeffrey van den Brink</span>
+					<Avatar.Root>
+						<Avatar.Image
+							src="https://avatars.githubusercontent.com/u/60582071?v=4"
+							alt="Profile"
+						/>
+						<Avatar.Fallback>JB</Avatar.Fallback>
+					</Avatar.Root>
+				</a>
+				<Button href="/login">Login</Button>
+				<Button href="/signup" variant="secondary">Sign Up</Button>
+
 				{#each docsConfig.mainNav as navItem, index (navItem + index.toString())}
 					{#if navItem.href}
 						<MobileLink href={navItem.href} bind:open class="text-foreground">
@@ -35,7 +49,7 @@
 					{/if}
 				{/each}
 			</div>
-			<div class="flex flex-col space-y-2">
+			<!-- <div class="flex flex-col space-y-2">
 				{#each docsConfig.sidebarNav as navItem, index (index)}
 					<div class="flex flex-col space-y-3 pt-6">
 						<h4 class="font-medium">{navItem.title}</h4>
@@ -57,7 +71,7 @@
 						{/if}
 					</div>
 				{/each}
-			</div>
+			</div> -->
 		</div>
 	</Sheet.Content>
 </Sheet.Root>

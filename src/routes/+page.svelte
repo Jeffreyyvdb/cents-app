@@ -17,6 +17,7 @@
 	}));
 
 	let options = {
+		yaxis: { show: false },
 		chart: {
 			toolbar: { show: false, tools: { download: false } },
 			type: 'area',
@@ -30,7 +31,7 @@
 			offsetY: 0,
 			floating: false,
 			style: {
-				fontSize: '24px',
+				fontSize: '16px',
 				color: '#213043'
 			}
 		},
@@ -131,9 +132,9 @@
 <div class="container relative">
 	<div class="mt-2">
 		<h1 class="text-center font-title text-4xl md:text-6xl">{siteConfig.name}</h1>
-		<h1 class="text-center text-2xl font-bold capitalize md:text-4xl">Main portfolio</h1>
+		<h1 class="text-center text-2xl font-bold capitalize md:text-4xl">Main Wallet</h1>
 		<!-- Changes  -->
-		<section class="my-6 md:flex md:flex-wrap md:justify-center md:gap-4">
+		<section class="my-2 md:flex md:flex-wrap md:justify-center md:gap-4">
 			<Card.Root class="mb-2">
 				<Card.Header>
 					<Card.Title class="text-xl">$ 13.379,86</Card.Title>
@@ -157,30 +158,41 @@
 		</section>
 
 		<!-- Chart -->
-		<section class="justify-center overflow-hidden">
-			<div bind:this={chart}></div>
+		<section class="my-2 justify-center overflow-hidden">
+			<Card.Root class="p-2">
+				<div bind:this={chart} class=""></div>
+			</Card.Root>
 		</section>
 		<!-- Recent transactions -->
-		<Table.Root>
-			<Table.Caption>A list of your recent transactions.</Table.Caption>
-			<Table.Header>
-				<Table.Row>
-					<Table.Head class="">Action</Table.Head>
-					<Table.Head>Asset</Table.Head>
-					<Table.Head>Your price</Table.Head>
-					<Table.Head>Amount</Table.Head>
-				</Table.Row>
-			</Table.Header>
-			<Table.Body>
-				{#each transactions as tx}
-					<Table.Row>
-						<Table.Cell class="font-medium">{tx.action}</Table.Cell>
-						<Table.Cell>{tx.asset}</Table.Cell>
-						<Table.Cell>€{tx.price}</Table.Cell>
-						<Table.Cell>{tx.amount}</Table.Cell>
-					</Table.Row>
-				{/each}
-			</Table.Body>
-		</Table.Root>
+		<section class="my-2">
+			<Card.Root class="p-2">
+				<Card.Header>
+					<Button>Add transaction</Button>
+				</Card.Header>
+				<Card.Content>
+					<Table.Root>
+						<Table.Caption>A list of your recent transactions.</Table.Caption>
+						<Table.Header>
+							<Table.Row>
+								<Table.Head class="">Action</Table.Head>
+								<Table.Head>Asset</Table.Head>
+								<Table.Head>Your price</Table.Head>
+								<Table.Head>Amount</Table.Head>
+							</Table.Row>
+						</Table.Header>
+						<Table.Body>
+							{#each transactions as tx}
+								<Table.Row>
+									<Table.Cell class="font-medium">{tx.action}</Table.Cell>
+									<Table.Cell>{tx.asset}</Table.Cell>
+									<Table.Cell>€{tx.price}</Table.Cell>
+									<Table.Cell>{tx.amount}</Table.Cell>
+								</Table.Row>
+							{/each}
+						</Table.Body>
+					</Table.Root>
+				</Card.Content>
+			</Card.Root>
+		</section>
 	</div>
 </div>
