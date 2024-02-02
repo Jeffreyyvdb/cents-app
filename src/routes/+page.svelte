@@ -95,30 +95,30 @@
 
 <div class="container relative">
 	<div class="mt-2">
-		<h1 class="text-center text-6xl font-bold">Main portfolio</h1>
-		<section class="my-6 flex flex-wrap justify-center gap-4">
-			<Card.Root>
+		<h1 class="text-center text-4xl font-bold md:text-6xl">Main portfolio</h1>
+		<section class="my-6 md:flex md:flex-wrap md:justify-center md:gap-4">
+			<Card.Root class="mb-2">
 				<Card.Header>
 					<Card.Title class="text-xl">$ 13.379,86</Card.Title>
 					<Card.Description class="text-green-500">+$143,75 ^ 1,08% (24h)</Card.Description>
 				</Card.Header>
 			</Card.Root>
 
-			<Card.Root>
+			<Card.Root class="mb-2">
 				<Card.Header>
 					<Card.Title class="text-xl">€ 12.298,37</Card.Title>
 					<Card.Description class="text-green-500">+€132,13 ^ 1,08% (24h)</Card.Description>
 				</Card.Header>
 			</Card.Root>
 
-			<Card.Root>
+			<Card.Root class="mb-2">
 				<Card.Header>
 					<Card.Title class="text-xl">₤ 10.490,88</Card.Title>
 					<Card.Description class="text-green-500">+₤112,61 ^ 1,08% (24h)</Card.Description>
 				</Card.Header>
 			</Card.Root>
 		</section>
-		<section class="justify-center">
+		<section class="justify-center overflow-hidden">
 			<div bind:this={chart}></div>
 		</section>
 	</div>

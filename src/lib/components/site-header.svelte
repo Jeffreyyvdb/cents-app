@@ -20,20 +20,6 @@
 				<CommandMenu />
 			</div>
 			<nav class="flex items-center">
-				<a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer">
-					<div
-						class={cn(
-							buttonVariants({
-								size: 'sm',
-								variant: 'ghost'
-							}),
-							'w-9 px-0'
-						)}
-					>
-						<Icons.gitHub class="h-4 w-4" />
-						<span class="sr-only">GitHub</span>
-					</div>
-				</a>
 				<a href={siteConfig.links.twitter} target="_blank" rel="noreferrer">
 					<div
 						class={cn(
