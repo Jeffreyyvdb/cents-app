@@ -28,15 +28,15 @@
 		</MobileLink>
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
-				<a href="/profile" class="flex justify-between">
+				<a href="/profile" class="flex-start flex">
 					<Avatar.Root>
 						<Avatar.Image
 							src="https://avatars.githubusercontent.com/u/60582071?v=4"
 							alt="Profile"
 						/>
 						<Avatar.Fallback>JB</Avatar.Fallback>
-						<span>Jeffrey van den Brink</span>
 					</Avatar.Root>
+					<span class="ml-4 leading-[40px]">Jeffrey van den Brink</span>
 				</a>
 				<Button href="/login">Login</Button>
 				<Button href="/signup" variant="secondary">Sign Up</Button>

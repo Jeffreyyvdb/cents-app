@@ -41,7 +41,7 @@
 
 				<Button href="/login" variant="ghost" class="hidden md:block">Login</Button>
 				<Button href="/signup" variant="ghost" class="hidden md:block">Sign Up</Button>
-				<a href="/profile" class=" hidden justify-between md:flex">
+				<a href="/profile" class=" ml-2 hidden justify-between md:flex">
 					<Avatar.Root>
 						<Avatar.Image
 							src="https://avatars.githubusercontent.com/u/60582071?v=4"
