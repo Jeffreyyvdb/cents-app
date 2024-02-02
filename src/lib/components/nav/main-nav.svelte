@@ -14,49 +14,32 @@
 	</a>
 	<nav class="flex items-center gap-6 text-sm">
 		<a
-			href="/docs"
+			href="/"
 			class={cn(
 				'transition-colors hover:text-foreground/80',
-				$page.url.pathname === '/docs' ? 'text-foreground' : 'text-foreground/60'
+				$page.url.pathname === '/' ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Docs
+			Dashboard
 		</a>
 
 		<a
-			href="/docs/components"
+			href="/portfolios"
 			class={cn(
 				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/docs/components') ? 'text-foreground' : 'text-foreground/60'
+				$page.url.pathname.startsWith('/portfolios') ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Components
+			Portfolios
 		</a>
 		<a
-			href="/themes"
+			href="/settings"
 			class={cn(
 				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/themes') ? 'text-foreground' : 'text-foreground/60'
+				$page.url.pathname.startsWith('/settings') ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Themes
-		</a>
-		<a
-			href="/examples"
-			class={cn(
-				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/examples') ? 'text-foreground' : 'text-foreground/60'
-			)}
-		>
-			Examples
-		</a>
-		<a
-			href={siteConfig.links.github}
-			target="_blank"
-			rel="noopener noreferrer"
-			class={cn('hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:block')}
-		>
-			GitHub
+			Settings
 		</a>
 	</nav>
 </div>

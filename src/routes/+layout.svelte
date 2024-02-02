@@ -3,6 +3,10 @@
 	import '../app.pcss';
 	import SiteHeader from '$lib/components/site-header.svelte';
 	import SiteFooter from '$lib/components/site-footer.svelte';
+	import { dev } from '$app/environment';
+	import { inject } from '@vercel/analytics';
+
+	inject({ mode: dev ? 'development' : 'production' });
 </script>
 
 <ModeWatcher />
