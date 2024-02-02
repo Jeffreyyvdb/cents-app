@@ -5,6 +5,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { onMount } from 'svelte';
+	import { siteConfig } from '$lib/config/site';
 
 	import dataSet from './market-price.json';
 
@@ -95,7 +96,9 @@
 
 <div class="container relative">
 	<div class="mt-2">
-		<h1 class="text-center text-4xl font-bold md:text-6xl">Main portfolio</h1>
+		<h1 class="text-center font-title text-4xl md:text-6xl">{siteConfig.name}</h1>
+		<h1 class="text-center text-2xl font-bold capitalize md:text-4xl">Main portfolio</h1>
+		<!-- Changes  -->
 		<section class="my-6 md:flex md:flex-wrap md:justify-center md:gap-4">
 			<Card.Root class="mb-2">
 				<Card.Header>
@@ -118,8 +121,11 @@
 				</Card.Header>
 			</Card.Root>
 		</section>
+
+		<!-- Chart -->
 		<section class="justify-center overflow-hidden">
 			<div bind:this={chart}></div>
 		</section>
+		<!-- Recent transactions -->
 	</div>
 </div>
