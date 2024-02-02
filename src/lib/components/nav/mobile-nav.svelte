@@ -23,7 +23,7 @@
 	<Sheet.Content side="left" class="pr-0">
 		<MobileLink href="/" class="flex items-center" bind:open>
 			<Icons.logo class="mr-2 h-4 w-4" />
-			<span class="font-bold">{siteConfig.name}</span>
+			<span class="font-title text-2xl">{siteConfig.name}</span>
 		</MobileLink>
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto pb-10 pl-6">
 			<div class="flex flex-col space-y-3">
