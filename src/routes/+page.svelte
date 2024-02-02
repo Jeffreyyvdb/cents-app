@@ -6,67 +6,87 @@
 	import { Label } from '$lib/components/ui/label';
 	import { onMount } from 'svelte';
 
-	let chart;
-	var options = {
-		series: [
-			{
-				name: 'Desktops',
-				data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-			}
-		],
+	import dataSet from './market-price.json';
+
+	// Transform "x" values to JavaScript Date objects
+	const formattedData = dataSet.values.map((item) => ({
+		x: new Date(item.x * 1000), // Assuming the timestamp is in seconds
+		y: item.y
+	}));
+
+	let options = {
 		chart: {
 			toolbar: { show: false, tools: { download: false } },
-			height: 350,
-			type: 'line',
-			zoom: {
-				enabled: false
+			type: 'area',
+			height: 350
+		},
+		title: {
+			text: 'Bitcoin price / last 30 days',
+			align: 'left',
+			margin: 10,
+			offsetX: 0,
+			offsetY: 0,
+			floating: false,
+			style: {
+				fontSize: '24px',
+				color: '#213043'
+			}
+		},
+
+		toolbar: {
+			show: false,
+			tools: {
+				download: false,
+				selection: false,
+				zoom: false,
+				zoomin: false,
+				zoomout: false,
+				pan: false,
+				reset: false
 			}
 		},
 		dataLabels: {
 			enabled: false
 		},
-		stroke: {
-			curve: 'straight'
-		},
-		title: {
-			text: 'Product Trends by Month',
-			align: 'left'
-		},
-		grid: {},
-		xaxis: {
-			categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
-		},
-
 		tooltip: {
+			x: {
+				format: 'dd MMM yyyy'
+			},
+			fixed: {
+				enabled: false,
+				position: 'topRight'
+			},
 			theme: 'dark'
+		},
+		fill: {
+			opacity: 1,
+			type: 'gradient'
+		},
+		colors: ['#22c55e'],
+		series: [
+			{
+				name: 'BTC (USD)',
+				data: formattedData
+			}
+		],
+		xaxis: {
+			type: 'datetime',
+			axisBorder: {
+				show: false
+			},
+			axisTicks: {
+				show: false
+			}
 		}
 	};
 
-	const frameworks = [
-		{
-			value: 'sveltekit',
-			label: 'SvelteKit'
-		},
-		{
-			value: 'next',
-			label: 'Next.js'
-		},
-		{
-			value: 'astro',
-			label: 'Astro'
-		},
-		{
-			value: 'nuxt',
-			label: 'Nuxt.js'
-		}
-	];
+	let chart: any;
 
 	onMount(async () => {
-		// Dynamically import ApexCharts
 		const { default: ApexCharts } = await import('apexcharts');
 
 		// Create a new instance of ApexCharts
-		chart = new ApexCharts(document.querySelector('#chart'), options);
+		chart = new ApexCharts(chart, options);
 
 		// Render the chart
 		chart.render();
@@ -99,7 +119,7 @@
 			</Card.Root>
 		</section>
 		<section class="justify-center">
-			<div id="chart"></div>
+			<div bind:this={chart}></div>
 		</section>
 	</div>
 </div>
