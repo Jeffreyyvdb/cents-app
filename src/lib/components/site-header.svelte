@@ -7,6 +7,8 @@
 	import { buttonVariants } from './ui/button';
 	import ModeToggle from '$lib/components/move-toggle.svelte';
 	import CommandMenu from './command-menu.svelte';
+	import { Button } from './ui/button';
+	import * as Avatar from '$lib/components/ui/avatar';
 </script>
 
 <header
@@ -35,6 +37,20 @@
 					</div>
 				</a>
 				<ModeToggle />
+				<!-- Avatar -->
+
+				<Button href="/login" variant="ghost" class="hidden md:block">Login</Button>
+				<Button href="/signup" variant="ghost" class="hidden md:block">Sign Up</Button>
+				<a href="/profile" class=" hidden justify-between md:flex">
+					<Avatar.Root>
+						<Avatar.Image
+							src="https://avatars.githubusercontent.com/u/60582071?v=4"
+							alt="Profile"
+						/>
+						<Avatar.Fallback>JB</Avatar.Fallback>
+						<span>Jeffrey van den Brink</span>
+					</Avatar.Root>
+				</a>
 			</nav>
 		</div>
 	</div>
