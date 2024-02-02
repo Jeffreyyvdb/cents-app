@@ -6,6 +6,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { onMount } from 'svelte';
 	import { siteConfig } from '$lib/config/site';
+	import * as Table from '$lib/components/ui/table';
 
 	import dataSet from './market-price.json';
 
@@ -83,6 +84,39 @@
 
 	let chart: any;
 
+	let transactions = [
+		{
+			action: 'Buy',
+			asset: 'BTC',
+			price: 150.0,
+			amount: 0.0038
+		},
+		{
+			action: 'Sell',
+			asset: 'ETH',
+			price: 200.0,
+			amount: 0.02
+		},
+		{
+			action: 'Buy',
+			asset: 'LTC',
+			price: 80.0,
+			amount: 0.01
+		},
+		{
+			action: 'Sell',
+			asset: 'XRP',
+			price: 25.5,
+			amount: 50.0
+		},
+		{
+			action: 'Buy',
+			asset: 'ADA',
+			price: 1.75,
+			amount: 100.0
+		}
+	];
+
 	onMount(async () => {
 		const { default: ApexCharts } = await import('apexcharts');
 
@@ -127,5 +161,26 @@
 			<div bind:this={chart}></div>
 		</section>
 		<!-- Recent transactions -->
+		<Table.Root>
+			<Table.Caption>A list of your recent transactions.</Table.Caption>
+			<Table.Header>
+				<Table.Row>
+					<Table.Head class="">Action</Table.Head>
+					<Table.Head>Asset</Table.Head>
+					<Table.Head>Your price</Table.Head>
+					<Table.Head>Amount</Table.Head>
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{#each transactions as tx}
+					<Table.Row>
+						<Table.Cell class="font-medium">{tx.action}</Table.Cell>
+						<Table.Cell>{tx.asset}</Table.Cell>
+						<Table.Cell>€{tx.price}</Table.Cell>
+						<Table.Cell>{tx.amount}</Table.Cell>
+					</Table.Row>
+				{/each}
+			</Table.Body>
+		</Table.Root>
 	</div>
 </div>
