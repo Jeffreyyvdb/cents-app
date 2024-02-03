@@ -32,7 +32,7 @@
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
 				{#if data.session}
-					<a href="/profile" class="flex-start flex">
+					<a href="/profile" on:click={() => (open = !open)} class="flex-start flex">
 						<Avatar.Root>
 							<Avatar.Image
 								src="https://avatars.githubusercontent.com/u/60582071?v=4"
@@ -55,11 +55,12 @@
 							cancel();
 						}}
 					>
-						<Button type="submit">Logout</Button>
+						<Button type="submit" on:click={() => (open = !open)}>Logout</Button>
 					</form>
 				{:else}
-					<Button href="/login">Login</Button>
-					<Button href="/signup" variant="secondary">Sign Up</Button>
+					<Button href="/login" on:click={() => (open = !open)}>Login</Button>
+					<Button href="/signup" variant="secondary" on:click={() => (open = !open)}>Sign Up</Button
+					>
 				{/if}
 
 				{#each docsConfig.mainNav as navItem, index (navItem + index.toString())}
