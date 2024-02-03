@@ -9,6 +9,12 @@
 	import CommandMenu from './command-menu.svelte';
 	import { Button } from './ui/button';
 	import * as Avatar from '$lib/components/ui/avatar';
+	import { enhance, type applyAction } from '$app/forms';
+	import type { PageData } from '../../routes/$types';
+
+	import { supabaseClient } from '$lib/supabase';
+
+	export let data: PageData;
 </script>
 
 <header
@@ -16,7 +22,7 @@
 >
 	<div class="container flex h-14 max-w-screen-2xl items-center">
 		<MainNav />
-		<MobileNav />
+		<MobileNav {data} />
 		<div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
 			<div class="w-full flex-1 md:w-auto md:flex-none">
 				<CommandMenu />
@@ -38,19 +44,35 @@
 				</a>
 				<ModeToggle />
 				<!-- Avatar -->
-
-				<Button href="/login" variant="ghost" class="hidden md:block">Login</Button>
-				<Button href="/signup" variant="ghost" class="hidden md:block">Sign Up</Button>
-				<a href="/profile" class=" ml-2 hidden justify-between md:flex">
-					<Avatar.Root>
-						<Avatar.Image
-							src="https://avatars.githubusercontent.com/u/60582071?v=4"
-							alt="Profile"
-						/>
-						<Avatar.Fallback>JB</Avatar.Fallback>
-						<span>Jeffrey van den Brink</span>
-					</Avatar.Root>
-				</a>
+				{#if data.session}
+					<form
+						action="/logout"
+						method="POST"
+						use:enhance={async ({ formElement, formData, action, cancel }) => {
+							console.log('logout button clicked');
+							const { error } = await supabaseClient.auth.signOut();
+							if (error) {
+								console.log(error);
+							}
+							cancel();
+						}}
+					>
+						<Button type="submit" variant="ghost" class="hidden md:block">Logout</Button>
+					</form>
+					<a href="/profile" class=" ml-2 hidden justify-between md:flex">
+						<Avatar.Root>
+							<Avatar.Image
+								src="https://avatars.githubusercontent.com/u/60582071?v=4"
+								alt="Profile"
+							/>
+							<Avatar.Fallback>JB</Avatar.Fallback>
+							<span>Jeffrey van den Brink</span>
+						</Avatar.Root>
+					</a>
+				{:else}
+					<Button href="/login" variant="ghost" class="hidden md:block">Login</Button>
+					<Button href="/signup" variant="ghost" class="hidden md:block">Sign Up</Button>
+				{/if}
 			</nav>
 		</div>
 	</div>

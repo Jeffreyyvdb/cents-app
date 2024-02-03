@@ -7,6 +7,10 @@
 
 	import dataSet from './market-price.json';
 
+	export let data;
+	let { supabase } = data;
+	$: ({ supabase } = data);
+
 	// Transform "x" values to JavaScript Date objects
 	const formattedData = dataSet.values.map((item) => ({
 		x: new Date(item.x * 1000), // Assuming the timestamp is in seconds
@@ -126,70 +130,68 @@
 	});
 </script>
 
-<div class="container relative">
-	<div class="mt-2">
-		<h1 class="text-center font-title text-4xl md:text-6xl">{siteConfig.name}</h1>
-		<h1 class="text-center text-2xl font-bold capitalize md:text-4xl">Main Wallet</h1>
-		<!-- Changes  -->
-		<section class="my-2 md:flex md:flex-wrap md:justify-center md:gap-4">
-			<Card.Root class="mb-2">
-				<Card.Header>
-					<Card.Title class="text-xl">$ 13.379,86</Card.Title>
-					<Card.Description class="text-green-500">+$143,75 ^ 1,08% (24h)</Card.Description>
-				</Card.Header>
-			</Card.Root>
+<div class="mt-2">
+	<h1 class="text-center font-title text-4xl md:text-6xl">{siteConfig.name}</h1>
+	<h1 class="text-center text-2xl font-bold capitalize md:text-4xl">Main Wallet</h1>
+	<!-- Changes  -->
+	<section class="my-2 md:flex md:flex-wrap md:justify-center md:gap-4">
+		<Card.Root class="mb-2">
+			<Card.Header>
+				<Card.Title class="text-xl">$ 13.379,86</Card.Title>
+				<Card.Description class="text-green-500">+$143,75 ^ 1,08% (24h)</Card.Description>
+			</Card.Header>
+		</Card.Root>
 
-			<Card.Root class="mb-2">
-				<Card.Header>
-					<Card.Title class="text-xl">€ 12.298,37</Card.Title>
-					<Card.Description class="text-green-500">+€132,13 ^ 1,08% (24h)</Card.Description>
-				</Card.Header>
-			</Card.Root>
+		<Card.Root class="mb-2">
+			<Card.Header>
+				<Card.Title class="text-xl">€ 12.298,37</Card.Title>
+				<Card.Description class="text-green-500">+€132,13 ^ 1,08% (24h)</Card.Description>
+			</Card.Header>
+		</Card.Root>
 
-			<Card.Root class="mb-2">
-				<Card.Header>
-					<Card.Title class="text-xl">₤ 10.490,88</Card.Title>
-					<Card.Description class="text-green-500">+₤112,61 ^ 1,08% (24h)</Card.Description>
-				</Card.Header>
-			</Card.Root>
-		</section>
+		<Card.Root class="mb-2">
+			<Card.Header>
+				<Card.Title class="text-xl">₤ 10.490,88</Card.Title>
+				<Card.Description class="text-green-500">+₤112,61 ^ 1,08% (24h)</Card.Description>
+			</Card.Header>
+		</Card.Root>
+	</section>
 
-		<!-- Chart -->
-		<section class="my-2 justify-center overflow-hidden">
-			<Card.Root class="p-2">
-				<div bind:this={chart} class=""></div>
-			</Card.Root>
-		</section>
-		<!-- Recent transactions -->
-		<section class="my-2">
-			<Card.Root class="p-2">
-				<Card.Header>
-					<Button>Add transaction</Button>
-				</Card.Header>
-				<Card.Content>
-					<Table.Root>
-						<Table.Caption>A list of your recent transactions.</Table.Caption>
-						<Table.Header>
+	<!-- Chart -->
+	<section class="my-2 justify-center overflow-hidden">
+		<Card.Root class="p-2">
+			<div bind:this={chart} class=""></div>
+		</Card.Root>
+	</section>
+	<!-- Recent transactions -->
+	<section class="my-2">
+		<Card.Root class="p-2">
+			<Card.Header>
+				<Button>Add transaction</Button>
+			</Card.Header>
+			<Card.Content>
+				<Table.Root>
+					<Table.Caption>A list of your recent transactions.</Table.Caption>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head class="">Action</Table.Head>
+							<Table.Head>Asset</Table.Head>
+							<Table.Head>Your price</Table.Head>
+							<Table.Head>Amount</Table.Head>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{#each transactions as tx}
 							<Table.Row>
-								<Table.Head class="">Action</Table.Head>
-								<Table.Head>Asset</Table.Head>
-								<Table.Head>Your price</Table.Head>
-								<Table.Head>Amount</Table.Head>
+								<Table.Cell class="font-medium">{tx.action}</Table.Cell>
+								<Table.Cell>{tx.asset}</Table.Cell>
+								<Table.Cell>€{tx.price}</Table.Cell>
+								<Table.Cell>{tx.amount}</Table.Cell>
 							</Table.Row>
-						</Table.Header>
-						<Table.Body>
-							{#each transactions as tx}
-								<Table.Row>
-									<Table.Cell class="font-medium">{tx.action}</Table.Cell>
-									<Table.Cell>{tx.asset}</Table.Cell>
-									<Table.Cell>€{tx.price}</Table.Cell>
-									<Table.Cell>{tx.amount}</Table.Cell>
-								</Table.Row>
-							{/each}
-						</Table.Body>
-					</Table.Root>
-				</Card.Content>
-			</Card.Root>
-		</section>
-	</div>
+						{/each}
+					</Table.Body>
+				</Table.Root>
+			</Card.Content>
+		</Card.Root>
+	</section>
 </div>

@@ -6,7 +6,9 @@
 	import { Icons } from '../icons';
 	import MobileLink from './mobile-link.svelte';
 	import * as Avatar from '../ui/avatar';
+	import type { PageData } from '../../../routes/$types';
 
+	export let data: PageData;
 	let open = false;
 </script>
 
