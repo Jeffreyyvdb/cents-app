@@ -12,8 +12,6 @@ export const load: PageServerLoad = async (event) => {
 export const actions ={ 
     default: async ({ request, url, locals: {supabase}  }) => {
         const form = await superValidate(request, signUpSchema);
-        console.log(form);
-        
 
         if(!form.valid){
             return fail(400, { form });
@@ -29,7 +27,8 @@ export const actions ={
         });
 
         if(error){
-            return fail(500, { message: 'Server errror. Try again later.', succes: false, email, form})
+            console.error(error);
+            return fail(500, { message: error.message, succes: false, email, form})
         }
 
         redirect(302 , "/");

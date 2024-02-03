@@ -10,6 +10,7 @@
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/supabase';
 	import { invalidateAll } from '$app/navigation';
+	import { Toaster } from '$lib/components/ui/sonner';
 
 	inject({ mode: dev ? 'development' : 'production' });
 	injectSpeedInsights();
@@ -20,7 +21,6 @@
 		const {
 			data: { subscription }
 		} = supabaseClient.auth.onAuthStateChange(() => {
-			console.log('Auth state change detected');
 			invalidateAll();
 		});
 
@@ -30,10 +30,11 @@
 	});
 </script>
 
+<Toaster />
 <ModeWatcher />
 
 <div class="relative flex min-h-screen flex-col bg-background" id="page" data-vaul-wrapper>
-	<SiteHeader {data}/>
+	<SiteHeader {data} />
 	<div class="flex-1">
 		<div class="container relative">
 			<slot />

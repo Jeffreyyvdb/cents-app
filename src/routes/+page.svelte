@@ -1,10 +1,10 @@
 <script lang="ts">
+	import ValueCard from '$lib/components/dashboard/value-card.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import { onMount } from 'svelte';
-	import { siteConfig } from '$lib/config/site';
 	import * as Table from '$lib/components/ui/table';
-	import ValueCard from '$lib/components/dashboard/value-card.svelte';
+	import { siteConfig } from '$lib/config/site';
+	import { onMount } from 'svelte';
 	import dataSet from './market-price.json';
 
 	export let data;

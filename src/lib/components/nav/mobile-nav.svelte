@@ -47,10 +47,8 @@
 						action="/logout"
 						method="POST"
 						use:enhance={async ({ formElement, formData, action, cancel }) => {
-							console.log('logout button clicked');
 							const { error } = await data.supabase.auth.signOut();
 							if (error) {
-								console.log(error);
 							}
 							cancel();
 						}}

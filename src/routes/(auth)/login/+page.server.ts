@@ -14,7 +14,6 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
   default: async({ request, locals: {supabase}}) => {
       const form = await superValidate(request, loginSchema)
-      console.log(form)
 
       if(!form.valid){
         return fail(400, {form});
@@ -26,11 +25,11 @@ export const actions: Actions = {
       const { error } = await supabase.auth.signInWithPassword({email, password});
 
       if(error instanceof AuthApiError && error.status === 400){
-        return fail(400, { message: "Invalid credentials.", succes: false, email, form})
+        return fail(400, { message: error.message, succes: false, email, form})
       }
 
       if(error){
-        return fail(500, { message: "Server error. Try again later.", succes: false, email, form})
+        return fail(500, { message: error.message, succes: false, email, form})
       }
 
       throw redirect(303, "/")
