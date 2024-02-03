@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import { siteConfig } from '$lib/config/site';
 	import * as Table from '$lib/components/ui/table';
-
+	import ValueCard from '$lib/components/dashboard/value-card.svelte';
 	import dataSet from './market-price.json';
 
 	export let data;
@@ -135,26 +135,9 @@
 	<h1 class="text-center text-2xl font-bold capitalize md:text-4xl">Main Wallet</h1>
 	<!-- Changes  -->
 	<section class="my-2 md:flex md:flex-wrap md:justify-center md:gap-4">
-		<Card.Root class="mb-2">
-			<Card.Header>
-				<Card.Title class="text-xl">$ 13.379,86</Card.Title>
-				<Card.Description class="text-green-500">+$143,75 ^ 1,08% (24h)</Card.Description>
-			</Card.Header>
-		</Card.Root>
-
-		<Card.Root class="mb-2">
-			<Card.Header>
-				<Card.Title class="text-xl">€ 12.298,37</Card.Title>
-				<Card.Description class="text-green-500">+€132,13 ^ 1,08% (24h)</Card.Description>
-			</Card.Header>
-		</Card.Root>
-
-		<Card.Root class="mb-2">
-			<Card.Header>
-				<Card.Title class="text-xl">₤ 10.490,88</Card.Title>
-				<Card.Description class="text-green-500">+₤112,61 ^ 1,08% (24h)</Card.Description>
-			</Card.Header>
-		</Card.Root>
+		<ValueCard value="$ 13.379,86" change="+$143,75 ^ 1,08% (24h)" />
+		<ValueCard value="€ 12.298,37" change="+€132,13 ^ 1,08% (24h)" />
+		<ValueCard value="₤ 10.490,88" change="+₤112,61 ^ 1,08% (24h)" />
 	</section>
 
 	<!-- Chart -->
