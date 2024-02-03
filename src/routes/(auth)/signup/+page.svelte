@@ -1,12 +1,20 @@
 <script lang="ts">
+	import { signUpSchema as schema } from './schema';
+	import type { PageData } from './$types';
 	import * as Form from '$lib/components/ui/form';
-	import { formSchema, type FormSchema } from './schema';
-	import type { SuperValidated } from 'sveltekit-superforms';
+	import { dev } from '$app/environment';
 
-	export let form: SuperValidated<FormSchema>;
+	export let data: PageData;
 </script>
 
-<Form.Root class="m-auto max-w-md" method="POST" {form} schema={formSchema} let:config>
+<Form.Root
+	class="m-auto max-w-md"
+	method="POST"
+	form={data.form}
+	schema={schema}
+	let:config
+	debug={dev}
+>
 	<Form.Field {config} name="email">
 		<Form.Item>
 			<Form.Label>Email</Form.Label>
