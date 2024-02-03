@@ -1,24 +1,34 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
+	import { type FormOptions } from 'formsnap';
 	import { toast } from 'svelte-sonner';
 	import type { ActionData, PageData } from './$types';
 	import { loginSchema as schema } from './schema';
-	import type { SubmitFunction } from 'formsnap';
 
 	export let data: PageData;
-	export let form: ActionData;
 
-	$: {
-		if (form?.succes === false) {
-			toast('Login failed', {
-				description: form?.message
-			});
+	const options: FormOptions<typeof schema> = {
+		onResult: ({ result }) => {
+			console.log('result', result);
+			if (result.type === 'failure') {
+				toast('Login failed', {
+					description: result.data.message
+				});
+			}
 		}
-	}
+	};
 </script>
 
-<Form.Root class="m-auto max-w-md" method="POST" form={data.form} {schema} let:config debug={dev}>
+<Form.Root
+	class="m-auto max-w-md"
+	method="POST"
+	form={data.form}
+	{schema}
+	let:config
+	debug={dev}
+	{options}
+>
 	<Form.Field {config} name="email">
 		<Form.Item>
 			<Form.Label>Email</Form.Label>
