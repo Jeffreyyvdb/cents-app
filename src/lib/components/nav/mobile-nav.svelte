@@ -7,6 +7,7 @@
 	import MobileLink from './mobile-link.svelte';
 	import * as Avatar from '../ui/avatar';
 	import type { PageData } from '../../../routes/$types';
+	import { enhance, type applyAction } from '$app/forms';
 
 	export let data: PageData;
 	let open = false;
@@ -30,18 +31,36 @@
 		</MobileLink>
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
-				<a href="/profile" class="flex-start flex">
-					<Avatar.Root>
-						<Avatar.Image
-							src="https://avatars.githubusercontent.com/u/60582071?v=4"
-							alt="Profile"
-						/>
-						<Avatar.Fallback>JB</Avatar.Fallback>
-					</Avatar.Root>
-					<span class="ml-4 leading-[40px]">Jeffrey van den Brink</span>
-				</a>
-				<Button href="/login">Login</Button>
-				<Button href="/signup" variant="secondary">Sign Up</Button>
+				{#if data.session}
+					<a href="/profile" class="flex-start flex">
+						<Avatar.Root>
+							<Avatar.Image
+								src="https://avatars.githubusercontent.com/u/60582071?v=4"
+								alt="Profile"
+							/>
+							<Avatar.Fallback>JB</Avatar.Fallback>
+						</Avatar.Root>
+						<span class="ml-4 leading-[40px]">Jeffrey van den Brink</span>
+					</a>
+
+					<form
+						action="/logout"
+						method="POST"
+						use:enhance={async ({ formElement, formData, action, cancel }) => {
+							console.log('logout button clicked');
+							const { error } = await data.supabase.auth.signOut();
+							if (error) {
+								console.log(error);
+							}
+							cancel();
+						}}
+					>
+						<Button type="submit">Logout</Button>
+					</form>
+				{:else}
+					<Button href="/login">Login</Button>
+					<Button href="/signup" variant="secondary">Sign Up</Button>
+				{/if}
 
 				{#each docsConfig.mainNav as navItem, index (navItem + index.toString())}
 					{#if navItem.href}
