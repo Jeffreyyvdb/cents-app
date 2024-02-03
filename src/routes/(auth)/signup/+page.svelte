@@ -65,15 +65,17 @@
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
-		{#if loading}
-			<Form.Button disabled class="my-2 w-full">
+
+		<!-- <pre>{JSON.stringify(signUpResult, null, 2)}</pre> -->
+
+		<Form.Button disabled={loading} class="my-2 w-full">
+			{#if loading}
 				<Reload class="mr-2 h-4 w-4 animate-spin" />
 				Please wait
-			</Form.Button>
-		{:else}
-			<Form.Button class="my-2 w-full">Sign up</Form.Button>
-		{/if}
-		<!-- <pre>{JSON.stringify(signUpResult, null, 2)}</pre> -->
+			{:else}
+				Sign up
+			{/if}
+		</Form.Button>
 
 		{#if signUpResult?.type === 'failure'}
 			<Alert.Root variant="destructive">

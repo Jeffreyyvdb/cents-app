@@ -50,14 +50,14 @@
 				<Form.Validation />
 			</Form.Item>
 		</Form.Field>
-		{#if loading}
-			<Form.Button disabled class="my-2 w-full">
+		<Form.Button disabled={loading} class="my-2 w-full">
+			{#if loading}
 				<Reload class="mr-2 h-4 w-4 animate-spin" />
 				Please wait
-			</Form.Button>
-		{:else}
-			<Form.Button class="my-2 w-full">Login</Form.Button>
-		{/if}
+			{:else}
+				Login
+			{/if}
+		</Form.Button>
 
 		{#if loginResult?.type === 'failure'}
 			<Alert.Root variant="destructive">

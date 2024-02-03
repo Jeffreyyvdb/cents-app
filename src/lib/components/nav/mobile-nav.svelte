@@ -8,6 +8,7 @@
 	import * as Avatar from '../ui/avatar';
 	import type { PageData } from '../../../routes/$types';
 	import { enhance, type applyAction } from '$app/forms';
+	import { Separator } from '$lib/components/ui/separator';
 
 	export let data: PageData;
 	let open = false;
@@ -53,13 +54,15 @@
 							cancel();
 						}}
 					>
-						<Button type="submit" on:click={() => (open = !open)}>Logout</Button>
+						<Button type="submit" on:click={() => (open = !open)} class="w-full">Logout</Button>
 					</form>
 				{:else}
 					<Button href="/login" on:click={() => (open = !open)}>Login</Button>
 					<Button href="/signup" variant="secondary" on:click={() => (open = !open)}>Sign Up</Button
 					>
 				{/if}
+
+				<Separator class="my-4" />
 
 				{#each docsConfig.mainNav as navItem, index (navItem + index.toString())}
 					{#if navItem.href}
