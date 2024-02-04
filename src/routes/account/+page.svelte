@@ -1,87 +1,69 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import Avatar from './Avatar.svelte';
+	import { dev } from '$app/environment';
+	import * as Form from '$lib/components/ui/form';
+	import { type FormOptions } from 'formsnap';
+	import { Reload } from 'radix-icons-svelte';
+	import type { PageData } from './$types';
+	import { updateAccountSchema as schema } from './schema';
+	import UploadAvatar from './upload-avatar.svelte';
 
-	export let data;
-	export let form;
+	export let data: PageData;
 
-	let { session, supabase, profile } = data;
-	$: ({ session, supabase, profile } = data);
+	let { form } = data;
+	$: ({ form } = data);
 
-	let profileForm: HTMLFormElement;
 	let loading = false;
-	let fullName: string = profile?.full_name ?? '';
-	let username: string = profile?.username ?? '';
-	let website: string = profile?.website ?? '';
-	let avatarUrl: string = profile?.avatar_url ?? '';
 
-	const handleSubmit: SubmitFunction = () => {
-		loading = true;
-		return async () => {
+	const options: FormOptions<typeof schema> = {
+		onSubmit(input) {
+			loading = true;
+		},
+		onResult: ({ result }) => {
 			loading = false;
-		};
-	};
-
-	const handleSignOut: SubmitFunction = () => {
-		loading = true;
-		return async ({ update }) => {
-			loading = false;
-			update();
-		};
+		}
 	};
 </script>
 
-<div class="form-widget">
-	<form
-		class="form-widget"
-		method="post"
-		action="?/update"
-		use:enhance={handleSubmit}
-		bind:this={profileForm}
-	>
-		<Avatar
-			{supabase}
-			bind:url={avatarUrl}
-			size={10}
-			on:upload={() => {
-				profileForm.requestSubmit();
-			}}
-		/>
+<section class="m-auto max-w-md">
+	<h1 class="mb-4 text-center text-4xl font-extrabold leading-none md:text-5xl lg:text-6xl">
+		Your account
+	</h1>
+	<Form.Root class="m-auto max-w-md" method="POST" {form} {schema} {options} let:config debug={dev}>
+		<UploadAvatar supabase={data.supabase} bind:url={form.data.avatar} />
 
-		<div>
-			<label for="email">Email</label>
-			<input id="email" type="text" value={session.user.email} disabled />
-		</div>
+		<Form.Field {config} name="displayName">
+			<Form.Item>
+				<Form.Label>Display name</Form.Label>
+				<Form.Input />
+				<Form.Validation />
+			</Form.Item>
+		</Form.Field>
 
-		<div>
-			<label for="fullName">Full Name</label>
-			<input id="fullName" name="fullName" type="text" value={form?.fullName ?? fullName} />
-		</div>
+		<Form.Field {config} name="username">
+			<Form.Item>
+				<Form.Label>Username</Form.Label>
+				<Form.Input />
+				<Form.Validation />
+			</Form.Item>
+		</Form.Field>
 
-		<div>
-			<label for="username">Username</label>
-			<input id="username" name="username" type="text" value={form?.username ?? username} />
-		</div>
+		<Form.Field {config} name="website">
+			<Form.Item>
+				<Form.Label>Website</Form.Label>
+				<Form.Input />
+				<Form.Validation />
+			</Form.Item>
+		</Form.Field>
 
-		<div>
-			<label for="website">Website</label>
-			<input id="website" name="website" type="url" value={form?.website ?? website} />
-		</div>
+		<Form.Button disabled={loading} class="my-2 w-full">
+			{#if loading}
+				<Reload class="mr-2 h-4 w-4 animate-spin" />
+				Please wait
+			{:else}
+				Update
+			{/if}
+		</Form.Button>
 
-		<div>
-			<input
-				type="submit"
-				class="button primary block"
-				value={loading ? 'Loading...' : 'Update'}
-				disabled={loading}
-			/>
-		</div>
-	</form>
-
-	<form method="post" action="?/signout" use:enhance={handleSignOut}>
-		<div>
-			<button class="button block" disabled={loading}>Sign Out</button>
-		</div>
-	</form>
-</div>
+		<!-- <pre>{JSON.stringify(data.form, null, 2)}</pre> -->
+	</Form.Root>
+</section>

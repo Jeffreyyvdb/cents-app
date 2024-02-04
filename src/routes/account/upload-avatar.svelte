@@ -1,8 +1,9 @@
 <script lang="ts">
+	import * as Avatar from '$lib/components/ui/avatar';
+	import { buttonVariants } from '$lib/components/ui/button';
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import { createEventDispatcher } from 'svelte';
 
-	export let size = 10;
 	export let url: string;
 	export let supabase: SupabaseClient;
 
@@ -63,31 +64,35 @@
 	$: if (url) downloadImage(url);
 </script>
 
-<div>
-	{#if avatarUrl}
-		<img
-			src={avatarUrl}
-			alt={avatarUrl ? 'Avatar' : 'No image'}
-			class="avatar image"
-			style="height: {size}em; width: {size}em;"
-		/>
-	{:else}
-		<div class="avatar no-image" style="height: {size}em; width: {size}em;" />
-	{/if}
-	<input type="hidden" name="avatarUrl" value={url} />
+<div class="flex justify-center">
 
-	<div style="width: {size}em;">
-		<label class="button primary block" for="single">
-			{uploading ? 'Uploading ...' : 'Upload'}
-		</label>
-		<input
-			style="visibility: hidden; position:absolute;"
-			type="file"
-			id="single"
-			accept="image/*"
-			bind:files
-			on:change={uploadAvatar}
-			disabled={uploading}
-		/>
-	</div>
+
+	{#if uploading || !avatarUrl}
+	<div class="avatar no-image" />
+	<Avatar.Root class="h-48 w-48">
+		<Avatar.Fallback>¢</Avatar.Fallback>
+	</Avatar.Root>
+	{:else}
+	<Avatar.Root class="h-48 w-48">
+		<Avatar.Image src={avatarUrl} alt={avatarUrl ? 'Avatar' : 'No image'} />
+		<Avatar.Fallback>¢</Avatar.Fallback>
+	</Avatar.Root>
+	{/if}
+	<input type="hidden" name="avatar" value={url} />
+</div>
+
+<div class="mt-2 flex justify-center">
+	<label class={buttonVariants({ variant: 'default' })} for="single">
+		{uploading ? 'Uploading ...' : 'Upload avatar'}
+	</label>
+	
+	<input
+		style="visibility: hidden; position:absolute;"
+		type="file"
+		id="single"
+		accept="image/*"
+		bind:files
+		on:change={uploadAvatar}
+		disabled={uploading}
+	/>
 </div>
