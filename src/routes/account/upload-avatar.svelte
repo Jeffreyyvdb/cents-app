@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import type { SupabaseClient } from '@supabase/supabase-js';
@@ -65,18 +66,17 @@
 </script>
 
 <div class="flex justify-center">
-
-
 	{#if uploading || !avatarUrl}
-	<div class="avatar no-image" />
-	<Avatar.Root class="h-48 w-48">
-		<Avatar.Fallback>¢</Avatar.Fallback>
-	</Avatar.Root>
+		<div class="avatar no-image" />
+		<Avatar.Root class="h-48 w-48">
+			<Avatar.Image src={avatarUrl} alt={avatarUrl ? 'Avatar' : 'No image'} />
+			<Avatar.Fallback>CN</Avatar.Fallback>
+		</Avatar.Root>y
 	{:else}
-	<Avatar.Root class="h-48 w-48">
-		<Avatar.Image src={avatarUrl} alt={avatarUrl ? 'Avatar' : 'No image'} />
-		<Avatar.Fallback>¢</Avatar.Fallback>
-	</Avatar.Root>
+		<Avatar.Root class="h-48 w-48">
+			<Avatar.Image src={avatarUrl} alt={avatarUrl ? 'Avatar' : 'No image'} />
+			<Avatar.Fallback>CN</Avatar.Fallback>
+		</Avatar.Root>
 	{/if}
 	<input type="hidden" name="avatar" value={url} />
 </div>
@@ -85,7 +85,6 @@
 	<label class={buttonVariants({ variant: 'default' })} for="single">
 		{uploading ? 'Uploading ...' : 'Upload avatar'}
 	</label>
-	
 	<input
 		style="visibility: hidden; position:absolute;"
 		type="file"

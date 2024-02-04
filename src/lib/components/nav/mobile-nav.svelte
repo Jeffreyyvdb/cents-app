@@ -12,6 +12,9 @@
 	import MobileLink from './mobile-link.svelte';
 
 	export let data: PageData;
+	export let avatarUrl: string | null = null;
+	export let profileName: string;
+
 	let open = false;
 
 	let loading = false;
@@ -47,13 +50,10 @@
 				{#if data.session}
 					<a href="/account" on:click={() => (open = !open)} class="flex-start flex">
 						<Avatar.Root>
-							<Avatar.Image
-								src="https://avatars.githubusercontent.com/u/60582071?v=4"
-								alt="Account"
-							/>
+							<Avatar.Image src={avatarUrl} alt="Account" />
 							<Avatar.Fallback>JB</Avatar.Fallback>
 						</Avatar.Root>
-						<span class="ml-4 leading-[40px]">Jeffrey van den Brink</span>
+						<span class="ml-4 leading-[40px]">{profileName}</span>
 					</a>
 
 					<form method="POST" action="/signout" use:enhance={handleSignOut}>

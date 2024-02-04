@@ -24,14 +24,12 @@ export const load : PageServerLoad = async ({  locals: {supabase,getSession}}) =
   form.data.username = profile?.username
   form.data.website = profile?.website
   
-    console.log("Loaded profile", profile);
    return {session, profile, form}
 }
 
 
 export const actions = {
     default: async ({ request, locals: { supabase, getSession } }) => {
-      console.log('Update profile...')
       const form = await superValidate(request, updateAccountSchema);
 
       if(!form.valid){
@@ -50,9 +48,6 @@ export const actions = {
         updated_at: new Date(),
       })
 
-    console.log("Updated profile", form.data);
-
-  
       if (error) {
         return fail(500, {form})
       }
