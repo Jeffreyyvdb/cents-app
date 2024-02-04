@@ -1,12 +1,26 @@
 <script lang="ts">
-	import MainNav from './nav/main-nav.svelte';
-	import MobileNav from './nav/mobile-nav.svelte';
-	import { Icons } from './icons';
+	import ModeToggle from '$lib/components/move-toggle.svelte';
+	import * as Avatar from '$lib/components/ui/avatar';
 	import { siteConfig } from '$lib/config/site';
 	import { cn } from '$lib/utils';
-	import { buttonVariants } from './ui/button';
-	import ModeToggle from '$lib/components/move-toggle.svelte';
+	import type { PageData } from '../../routes/$types';
 	import CommandMenu from './command-menu.svelte';
+	import { Icons } from './icons';
+	import MainNav from './nav/main-nav.svelte';
+	import MobileNav from './nav/mobile-nav.svelte';
+	import { Button, buttonVariants } from './ui/button';
+
+	import { supabaseClient } from '$lib/supabase';
+	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
+
+	export let data: PageData;
+
+	const handleSignOut = async () => {
+		await supabaseClient.auth.signOut();
+		goto('/login');
+		// return redirect(303, '/login');
+	};
 </script>
 
 <header
@@ -14,7 +28,7 @@
 >
 	<div class="container flex h-14 max-w-screen-2xl items-center">
 		<MainNav />
-		<MobileNav />
+		<MobileNav {data} />
 		<div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
 			<div class="w-full flex-1 md:w-auto md:flex-none">
 				<CommandMenu />
@@ -35,6 +49,24 @@
 					</div>
 				</a>
 				<ModeToggle />
+				<!-- Avatar -->
+				{#if data.session}
+					<Button on:click={handleSignOut} variant="ghost" class="hidden md:block">Logout</Button>
+
+					<a href="/profile" class=" ml-2 hidden justify-between md:flex">
+						<Avatar.Root>
+							<Avatar.Image
+								src="https://avatars.githubusercontent.com/u/60582071?v=4"
+								alt="Profile"
+							/>
+							<Avatar.Fallback>JB</Avatar.Fallback>
+							<span>Jeffrey van den Brink</span>
+						</Avatar.Root>
+					</a>
+				{:else}
+					<Button href="/login" variant="ghost" class="hidden md:block">Login</Button>
+					<Button href="/signup" variant="ghost" class="hidden md:block">Sign Up</Button>
+				{/if}
 			</nav>
 		</div>
 	</div>
