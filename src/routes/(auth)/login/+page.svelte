@@ -62,7 +62,7 @@
 		{#if loginResult?.type === 'failure'}
 			<Alert.Root variant="destructive">
 				<ExclamationTriangle class="h-4 w-4" />
-				<Alert.Title>{loginResult?.data?.message}</Alert.Title>
+				<Alert.Title>{loginResult?.data?.message ?? "Invalid credentials"}</Alert.Title>
 			</Alert.Root>
 		{/if}
 	</Form.Root>
