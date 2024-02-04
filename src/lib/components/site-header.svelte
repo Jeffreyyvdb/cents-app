@@ -1,8 +1,12 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { supabaseClient } from '$lib/supabase';
 	import ModeToggle from '$lib/components/move-toggle.svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { siteConfig } from '$lib/config/site';
 	import { cn } from '$lib/utils';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { onMount } from 'svelte';
 	import type { PageData } from '../../routes/$types';
 	import CommandMenu from './command-menu.svelte';
 	import { Icons } from './icons';
@@ -10,17 +14,38 @@
 	import MobileNav from './nav/mobile-nav.svelte';
 	import { Button, buttonVariants } from './ui/button';
 
-	import { supabaseClient } from '$lib/supabase';
-	import { redirect } from '@sveltejs/kit';
-	import { goto } from '$app/navigation';
-
 	export let data: PageData;
 
-	const handleSignOut = async () => {
-		await supabaseClient.auth.signOut();
-		goto('/login');
-		// return redirect(303, '/login');
+	let loading = false;
+
+	const handleSignOut: SubmitFunction = () => {
+		loading = true;
+		return async ({ update }) => {
+			loading = false;
+			update();
+		};
 	};
+
+	const downloadImage = async (blobUrl: string) => {
+		try {
+			const { data, error } = await supabaseClient.storage.from('avatars').download(blobUrl);
+			if (error) {
+				throw error;
+			}
+
+			avatarUrl = URL.createObjectURL(data);
+		} catch (error) {
+			if (error instanceof Error) {
+				console.log('Error downloading image: ', error.message);
+			}
+		}
+	};
+
+	let avatarUrl: string | null = null;
+	const blobUrl = data.profile?.avatar_url;
+	$: if (blobUrl) downloadImage(blobUrl);
+
+	const profileName = data.profile?.full_name;
 </script>
 
 <header
@@ -28,7 +53,7 @@
 >
 	<div class="container flex h-14 max-w-screen-2xl items-center">
 		<MainNav />
-		<MobileNav {data} />
+		<MobileNav {data} {profileName} {avatarUrl} />
 		<div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
 			<div class="w-full flex-1 md:w-auto md:flex-none">
 				<CommandMenu />
@@ -51,21 +76,22 @@
 				<ModeToggle />
 				<!-- Avatar -->
 				{#if data.session}
-					<Button on:click={handleSignOut} variant="ghost" class="hidden md:block">Logout</Button>
+					<form method="POST" action="/signout" use:enhance={handleSignOut}>
+						<Button type="submit" disabled={loading} variant="ghost" class="hidden md:block"
+							>Sign out</Button
+						>
+					</form>
 
-					<a href="/profile" class=" ml-2 hidden justify-between md:flex">
+					<a href="/account" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
-							<Avatar.Image
-								src="https://avatars.githubusercontent.com/u/60582071?v=4"
-								alt="Profile"
-							/>
+							<Avatar.Image src={avatarUrl} alt="Profile" />
 							<Avatar.Fallback>JB</Avatar.Fallback>
-							<span>Jeffrey van den Brink</span>
+							<span>{data.profile?.full_name}</span>
 						</Avatar.Root>
 					</a>
 				{:else}
-					<Button href="/login" variant="ghost" class="hidden md:block">Login</Button>
-					<Button href="/signup" variant="ghost" class="hidden md:block">Sign Up</Button>
+					<Button href="/signin" variant="ghost" class="hidden md:block">Sign in</Button>
+					<Button href="/signup" variant="ghost" class="hidden md:block">Sign up</Button>
 				{/if}
 			</nav>
 		</div>

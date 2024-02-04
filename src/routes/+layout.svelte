@@ -17,6 +17,9 @@
 
 	export let data: PageData;
 
+	let { supabase, session } = data;
+	$: ({ supabase, session } = data);
+
 	onMount(() => {
 		const {
 			data: { subscription }

@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
 	import { Separator } from '$lib/components/ui/separator';
 	import { docsConfig } from '$lib/config/docs';
 	import { siteConfig } from '$lib/config/site';
-	import { supabaseClient } from '$lib/supabase';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData } from '../../../routes/$types';
 	import { Icons } from '../icons';
 	import * as Avatar from '../ui/avatar';
@@ -13,13 +12,20 @@
 	import MobileLink from './mobile-link.svelte';
 
 	export let data: PageData;
+	export let avatarUrl: string | null = null;
+	export let profileName: string;
+
 	let open = false;
 
-	const handleSignOut = async () => {
-		await supabaseClient.auth.signOut();
-		open = false;
-		goto('/login');
-		// return redirect(303, '/login');
+	let loading = false;
+
+	const handleSignOut: SubmitFunction = () => {
+		loading = true;
+		return async ({ update }) => {
+			open = false;
+			loading = false;
+			update();
+		};
 	};
 </script>
 
@@ -42,20 +48,19 @@
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
 				{#if data.session}
-					<a href="/profile" on:click={() => (open = !open)} class="flex-start flex">
+					<a href="/account" on:click={() => (open = !open)} class="flex-start flex">
 						<Avatar.Root>
-							<Avatar.Image
-								src="https://avatars.githubusercontent.com/u/60582071?v=4"
-								alt="Profile"
-							/>
+							<Avatar.Image src={avatarUrl} alt="Account" />
 							<Avatar.Fallback>JB</Avatar.Fallback>
 						</Avatar.Root>
-						<span class="ml-4 leading-[40px]">Jeffrey van den Brink</span>
+						<span class="ml-4 leading-[40px]">{profileName}</span>
 					</a>
 
-					<Button on:click={handleSignOut} class="w-full">Logout</Button>
+					<form method="POST" action="/signout" use:enhance={handleSignOut}>
+						<Button type="submit" disabled={loading} class="w-full">Sign Out</Button>
+					</form>
 				{:else}
-					<Button href="/login" on:click={() => (open = !open)}>Login</Button>
+					<Button href="/signin" on:click={() => (open = !open)}>Sign in</Button>
 					<Button href="/signup" variant="secondary" on:click={() => (open = !open)}>Sign Up</Button
 					>
 				{/if}

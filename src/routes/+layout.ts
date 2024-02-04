@@ -25,5 +25,6 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     data: { session },
   } = await supabase.auth.getSession()
 
-  return { supabase, session }
+  // Do i need to spread data here to pass db query results of +layout.server.ts?
+  return { ...data, supabase, session }
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { signUpSchema as schema, signUpSchema } from './schema';
+	import { signUpSchema as schema } from './schema';
 	import type { PageData, ActionData } from './$types';
 	import * as Form from '$lib/components/ui/form';
 	import { dev } from '$app/environment';
