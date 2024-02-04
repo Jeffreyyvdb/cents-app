@@ -1,20 +1,26 @@
 <script lang="ts">
-	import MainNav from './nav/main-nav.svelte';
-	import MobileNav from './nav/mobile-nav.svelte';
-	import { Icons } from './icons';
+	import ModeToggle from '$lib/components/move-toggle.svelte';
+	import * as Avatar from '$lib/components/ui/avatar';
 	import { siteConfig } from '$lib/config/site';
 	import { cn } from '$lib/utils';
-	import { buttonVariants } from './ui/button';
-	import ModeToggle from '$lib/components/move-toggle.svelte';
-	import CommandMenu from './command-menu.svelte';
-	import { Button } from './ui/button';
-	import * as Avatar from '$lib/components/ui/avatar';
-	import { enhance, type applyAction } from '$app/forms';
 	import type { PageData } from '../../routes/$types';
+	import CommandMenu from './command-menu.svelte';
+	import { Icons } from './icons';
+	import MainNav from './nav/main-nav.svelte';
+	import MobileNav from './nav/mobile-nav.svelte';
+	import { Button, buttonVariants } from './ui/button';
 
 	import { supabaseClient } from '$lib/supabase';
+	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
+
+	const handleSignOut = async () => {
+		await supabaseClient.auth.signOut();
+		goto('/login');
+		// return redirect(303, '/login');
+	};
 </script>
 
 <header
@@ -45,19 +51,8 @@
 				<ModeToggle />
 				<!-- Avatar -->
 				{#if data.session}
-					<form
-						action="/logout"
-						method="POST"
-						use:enhance={async ({ formElement, formData, action, cancel }) => {
-							const { error } = await supabaseClient.auth.signOut();
-							if (error) {
-								console.log(error);
-							}
-							cancel();
-						}}
-					>
-						<Button type="submit" variant="ghost" class="hidden md:block">Logout</Button>
-					</form>
+					<Button on:click={handleSignOut} variant="ghost" class="hidden md:block">Logout</Button>
+
 					<a href="/profile" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
 							<Avatar.Image

@@ -1,17 +1,26 @@
 <script lang="ts">
-	import * as Sheet from '../ui/sheet';
-	import { Button } from '../ui/button';
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import { Separator } from '$lib/components/ui/separator';
 	import { docsConfig } from '$lib/config/docs';
 	import { siteConfig } from '$lib/config/site';
-	import { Icons } from '../icons';
-	import MobileLink from './mobile-link.svelte';
-	import * as Avatar from '../ui/avatar';
+	import { supabaseClient } from '$lib/supabase';
 	import type { PageData } from '../../../routes/$types';
-	import { enhance, type applyAction } from '$app/forms';
-	import { Separator } from '$lib/components/ui/separator';
+	import { Icons } from '../icons';
+	import * as Avatar from '../ui/avatar';
+	import { Button } from '../ui/button';
+	import * as Sheet from '../ui/sheet';
+	import MobileLink from './mobile-link.svelte';
 
 	export let data: PageData;
 	let open = false;
+
+	const handleSignOut = async () => {
+		await supabaseClient.auth.signOut();
+		open = false;
+		goto('/login');
+		// return redirect(303, '/login');
+	};
 </script>
 
 <Sheet.Root bind:open>
@@ -44,18 +53,7 @@
 						<span class="ml-4 leading-[40px]">Jeffrey van den Brink</span>
 					</a>
 
-					<form
-						action="/logout"
-						method="POST"
-						use:enhance={async ({ formElement, formData, action, cancel }) => {
-							const { error } = await data.supabase.auth.signOut();
-							if (error) {
-							}
-							cancel();
-						}}
-					>
-						<Button type="submit" on:click={() => (open = !open)} class="w-full">Logout</Button>
-					</form>
+					<Button on:click={handleSignOut} class="w-full">Logout</Button>
 				{:else}
 					<Button href="/login" on:click={() => (open = !open)}>Login</Button>
 					<Button href="/signup" variant="secondary" on:click={() => (open = !open)}>Sign Up</Button
