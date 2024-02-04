@@ -1,11 +1,11 @@
 import type { PageServerLoad, Actions } from "./$types";
 import { fail , redirect} from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
-import { loginSchema } from "./schema";
+import {  signInSchema } from "./schema";
 import { AuthApiError } from "@supabase/supabase-js";
 
 export const load: PageServerLoad = async (event) => {
-  const form = await superValidate(event, loginSchema)
+  const form = await superValidate(event, signInSchema)
   return {
     form
   };
@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
   default: async({ request, locals: {supabase}}) => {
-      const form = await superValidate(request, loginSchema)
+      const form = await superValidate(request, signInSchema)
 
       if(!form.valid){
         return fail(400, {form});

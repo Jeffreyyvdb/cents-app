@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import ModeToggle from '$lib/components/move-toggle.svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { siteConfig } from '$lib/config/site';
 	import { cn } from '$lib/utils';
+	import type { SubmitFunction } from '@sveltejs/kit';
+
 	import type { PageData } from '../../routes/$types';
 	import CommandMenu from './command-menu.svelte';
 	import { Icons } from './icons';
@@ -10,16 +13,16 @@
 	import MobileNav from './nav/mobile-nav.svelte';
 	import { Button, buttonVariants } from './ui/button';
 
-	import { supabaseClient } from '$lib/supabase';
-	import { redirect } from '@sveltejs/kit';
-	import { goto } from '$app/navigation';
-
 	export let data: PageData;
 
-	const handleSignOut = async () => {
-		await supabaseClient.auth.signOut();
-		goto('/login');
-		// return redirect(303, '/login');
+	let loading = false;
+
+	const handleSignOut: SubmitFunction = () => {
+		loading = true;
+		return async ({ update }) => {
+			loading = false;
+			update();
+		};
 	};
 </script>
 
@@ -51,7 +54,11 @@
 				<ModeToggle />
 				<!-- Avatar -->
 				{#if data.session}
-					<Button on:click={handleSignOut} variant="ghost" class="hidden md:block">Logout</Button>
+					<form method="POST" action="/signout" use:enhance={handleSignOut}>
+						<Button type="submit" disabled={loading} variant="ghost" class="hidden md:block"
+							>Sign out</Button
+						>
+					</form>
 
 					<a href="/profile" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
@@ -64,8 +71,8 @@
 						</Avatar.Root>
 					</a>
 				{:else}
-					<Button href="/login" variant="ghost" class="hidden md:block">Login</Button>
-					<Button href="/signup" variant="ghost" class="hidden md:block">Sign Up</Button>
+					<Button href="/signin" variant="ghost" class="hidden md:block">Sign in</Button>
+					<Button href="/signup" variant="ghost" class="hidden md:block">Sign up</Button>
 				{/if}
 			</nav>
 		</div>

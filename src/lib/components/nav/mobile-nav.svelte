@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
 	import { Separator } from '$lib/components/ui/separator';
 	import { docsConfig } from '$lib/config/docs';
 	import { siteConfig } from '$lib/config/site';
-	import { supabaseClient } from '$lib/supabase';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { PageData } from '../../../routes/$types';
 	import { Icons } from '../icons';
 	import * as Avatar from '../ui/avatar';
@@ -15,11 +14,15 @@
 	export let data: PageData;
 	let open = false;
 
-	const handleSignOut = async () => {
-		await supabaseClient.auth.signOut();
-		open = false;
-		goto('/login');
-		// return redirect(303, '/login');
+	let loading = false;
+
+	const handleSignOut: SubmitFunction = () => {
+		loading = true;
+		return async ({ update }) => {
+			open = false;
+			loading = false;
+			update();
+		};
 	};
 </script>
 
@@ -53,9 +56,11 @@
 						<span class="ml-4 leading-[40px]">Jeffrey van den Brink</span>
 					</a>
 
-					<Button on:click={handleSignOut} class="w-full">Logout</Button>
+					<form method="POST" action="/signout" use:enhance={handleSignOut}>
+						<Button type="submit" disabled={loading} class="w-full">Sign Out</Button>
+					</form>
 				{:else}
-					<Button href="/login" on:click={() => (open = !open)}>Login</Button>
+					<Button href="/signin" on:click={() => (open = !open)}>Sign in</Button>
 					<Button href="/signup" variant="secondary" on:click={() => (open = !open)}>Sign Up</Button
 					>
 				{/if}
