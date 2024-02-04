@@ -60,7 +60,7 @@
 						>
 					</form>
 
-					<a href="/profile" class=" ml-2 hidden justify-between md:flex">
+					<a href="/account" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
 							<Avatar.Image
 								src="https://avatars.githubusercontent.com/u/60582071?v=4"

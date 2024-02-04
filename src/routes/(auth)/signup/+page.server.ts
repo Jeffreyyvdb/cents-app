@@ -27,7 +27,6 @@ export const actions ={
         });
 
         if(error){
-            console.error(error);
             return fail(500, { message: error.message, succes: false, email, form})
         }
 

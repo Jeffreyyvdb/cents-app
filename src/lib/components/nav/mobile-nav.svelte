@@ -45,11 +45,11 @@
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
 				{#if data.session}
-					<a href="/profile" on:click={() => (open = !open)} class="flex-start flex">
+					<a href="/account" on:click={() => (open = !open)} class="flex-start flex">
 						<Avatar.Root>
 							<Avatar.Image
 								src="https://avatars.githubusercontent.com/u/60582071?v=4"
-								alt="Profile"
+								alt="Account"
 							/>
 							<Avatar.Fallback>JB</Avatar.Fallback>
 						</Avatar.Root>
