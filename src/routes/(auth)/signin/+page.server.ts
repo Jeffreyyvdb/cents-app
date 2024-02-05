@@ -12,7 +12,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-  default: async({ request, locals: {supabase}}) => {
+  signin: async({ request, locals: {supabase}}) => {
       const form = await superValidate(request, signInSchema)
 
       if(!form.valid){

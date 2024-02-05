@@ -38,6 +38,7 @@
 		class="m-auto max-w-md"
 		method="POST"
 		form={data.form}
+		action="?/signup"
 		{schema}
 		let:config
 		debug={dev}
@@ -66,8 +67,6 @@
 			</Form.Item>
 		</Form.Field>
 
-		<!-- <pre>{JSON.stringify(signUpResult, null, 2)}</pre> -->
-
 		<Form.Button disabled={loading} class="my-2 w-full">
 			{#if loading}
 				<Reload class="mr-2 h-4 w-4 animate-spin" />
@@ -76,7 +75,6 @@
 				Sign up
 			{/if}
 		</Form.Button>
-
 		{#if signUpResult?.type === 'failure'}
 			<Alert.Root variant="destructive">
 				<ExclamationTriangle class="h-4 w-4" />

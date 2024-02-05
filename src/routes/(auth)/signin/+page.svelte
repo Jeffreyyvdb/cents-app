@@ -35,7 +35,15 @@
 	<h1 class="mb-4 text-center font-title text-4xl leading-none md:text-5xl lg:text-6xl">
 		Sign in to ¢ents
 	</h1>
-	<Form.Root method="POST" form={data.form} {schema} let:config debug={dev} {options}>
+	<Form.Root
+		method="POST"
+		form={data.form}
+		{schema}
+		let:config
+		debug={dev}
+		action="?/signin"
+		{options}
+	>
 		<Form.Field {config} name="email">
 			<Form.Item>
 				<Form.Label>Email</Form.Label>

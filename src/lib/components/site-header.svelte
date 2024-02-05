@@ -85,8 +85,7 @@
 					<a href="/account" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
 							<Avatar.Image src={avatarUrl} alt="Profile" />
-							<Avatar.Fallback>JB</Avatar.Fallback>
-							<span>{data.profile?.full_name}</span>
+							<Avatar.Fallback>C$</Avatar.Fallback>
 						</Avatar.Root>
 					</a>
 				{:else}
