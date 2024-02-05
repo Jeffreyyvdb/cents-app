@@ -71,7 +71,7 @@
 		<Avatar.Root class="h-48 w-48">
 			<Avatar.Image src={avatarUrl} alt={avatarUrl ? 'Avatar' : 'No image'} />
 			<Avatar.Fallback>CN</Avatar.Fallback>
-		</Avatar.Root>y
+		</Avatar.Root>
 	{:else}
 		<Avatar.Root class="h-48 w-48">
 			<Avatar.Image src={avatarUrl} alt={avatarUrl ? 'Avatar' : 'No image'} />
