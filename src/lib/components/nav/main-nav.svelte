@@ -3,7 +3,6 @@
 	import { siteConfig } from '$lib/config/site';
 	import { cn } from '$lib/utils';
 	import { Icons } from '$lib/components/icons';
-
 </script>
 
 <div class="mr-4 hidden md:flex">
@@ -34,7 +33,7 @@
 			Wallets
 		</a>
 		<a
-			href="/settings"
+			href="/my/settings/profile"
 			class={cn(
 				'transition-colors hover:text-foreground/80',
 				$page.url.pathname.startsWith('/settings') ? 'text-foreground' : 'text-foreground/60'

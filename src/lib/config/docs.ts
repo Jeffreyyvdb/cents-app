@@ -17,7 +17,7 @@ export const docsConfig: DocsConfig = {
 		},
 		{
 			title: 'Settings',
-			href: '/settings'
+			href: '/my/setttings/profile'
 		}
 	],
 	sidebarNav: []

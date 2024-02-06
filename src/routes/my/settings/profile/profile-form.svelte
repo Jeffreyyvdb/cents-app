@@ -1,0 +1,110 @@
+<script lang="ts">
+	import * as Form from '$lib/components/ui/form';
+	import type { SuperValidated } from 'sveltekit-superforms';
+	import { profileFormSchema } from './schema';
+
+	export let data: SuperValidated<typeof profileFormSchema>;
+
+	const showPreview = (event) => {
+		const target = event.target;
+		const files = target.files;
+		if (files.length > 0) {
+			const src = URL.createObjectURL(files[0]);
+			// Cant we do this with binding?
+			const preview = document.getElementById('avatar-preview') as HTMLImageElement;
+			preview.src = src;
+		}
+	};
+
+	$: console.log;
+</script>
+
+<Form.Root
+	form={data}
+	schema={profileFormSchema}
+	let:config
+	method="POST"
+	class="space-y-8"
+	debug={true}
+	enctype="multipart/form-data"
+>
+	<div class=" w-full max-w-lg">
+		<label for="avatar" class="label pb-1 font-medium"> Profile picture </label>
+		<label for="avatar" class="avatar w-32 rounded-full hover:cursor-pointer">
+			<!-- Add an pencil for editing? -->
+			<!-- <label for="avatar" class="absolute -right-0.5 bottom-0.5 hover:cursor-pointer">
+			<span><Icon src={Pencil} class="h-4 w-4" /></span>
+		</label> -->
+			<div class="w-32 rounded-full border">
+				<!-- How to show fixed size an shape of picture -->
+				<img
+					src="https://picsum.photos/200"
+					class="w-32 rounded-full border"
+					alt="user avatar"
+					id="avatar-preview"
+				/>
+			</div>
+		</label>
+		<input
+			type="file"
+			name="avatar"
+			id="avatar"
+			value=""
+			accept="image/*"
+			hidden
+			on:change={showPreview}
+		/>
+	</div>
+	<Form.Item>
+		<Form.Field {config} name="username">
+			<Form.Label>Username</Form.Label>
+			<Form.Input placeholder="@Jeffreyyvdb" />
+			<Form.Description>
+				This is your public display name. It can be your real name or a pseudonym. You can only
+				change this once every 30 days.
+			</Form.Description>
+			<Form.Validation />
+		</Form.Field>
+	</Form.Item>
+	<Form.Item>
+		<Form.Field {config} name="email">
+			<Form.Label>Email</Form.Label>
+			<Form.Select>
+				<Form.SelectTrigger placeholder="Select a verified email to display" />
+				<Form.SelectContent>
+					<Form.SelectItem value="m@example.com" label="m@example.com"
+						>m@example.com
+					</Form.SelectItem>
+					<Form.SelectItem value="m@google.com" label="m@google.com">m@google.com</Form.SelectItem>
+					<Form.SelectItem value="m@support.com" label="m@support.com"
+						>m@support.com
+					</Form.SelectItem>
+				</Form.SelectContent>
+			</Form.Select>
+			<Form.Description>
+				You can manage verified email addresses in your <a href="/examples/forms">email settings</a
+				>.
+			</Form.Description>
+			<Form.Validation />
+		</Form.Field>
+	</Form.Item>
+	<Form.Item>
+		<Form.Field {config} name="bio">
+			<Form.Label>Bio</Form.Label>
+			<Form.Textarea placeholder="Tell us a little bit about yourself" class="resize-none" />
+			<Form.Description>
+				You can <span>@mention</span> other users and organizations to link to them.
+			</Form.Description>
+			<Form.Validation />
+		</Form.Field>
+	</Form.Item>
+	<Form.Item>
+		<Form.Field {config} name="website">
+			<Form.Label>Website</Form.Label>
+			<Form.Input />
+			<Form.Description>Your personal website, blog, or portfolio.</Form.Description>
+			<Form.Validation />
+		</Form.Field>
+	</Form.Item>
+	<Form.Button>Update profile</Form.Button>
+</Form.Root>

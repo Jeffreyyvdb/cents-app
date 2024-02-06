@@ -32,6 +32,8 @@ export const actions ={
         }
 
         // Fill the profile with data?
+        console.log(data);
+
 
         redirect(303 , "/signin");
     }
