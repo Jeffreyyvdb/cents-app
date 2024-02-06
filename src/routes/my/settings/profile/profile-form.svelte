@@ -29,11 +29,15 @@
 		}
 	};
 
-	const showPreview = (event) => {
-		const target = event.target;
-		const files = target.files;
-		if (files.length > 0) {
-			const src = URL.createObjectURL(files[0]);
+	const showPreview = (event: Event) => {
+		const target = event.target as HTMLInputElement;
+
+		if (!target.files) {
+			return;
+		}
+
+		if (target.files.length > 0) {
+			const src = URL.createObjectURL(target.files[0]);
 			// Cant we do this with binding?
 			const preview = document.getElementById('avatar-preview') as HTMLImageElement;
 			preview.src = src;
