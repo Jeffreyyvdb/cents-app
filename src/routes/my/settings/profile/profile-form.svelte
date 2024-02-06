@@ -2,8 +2,32 @@
 	import * as Form from '$lib/components/ui/form';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { profileFormSchema } from './schema';
+	import type { FormOptions } from 'formsnap';
+	import { toast } from 'svelte-sonner';
+	import { Reload } from 'radix-icons-svelte';
 
 	export let data: SuperValidated<typeof profileFormSchema>;
+	let loading = false;
+	let updateResult;
+
+	const options: FormOptions<typeof schema> = {
+		onSubmit(input) {
+			loading = true;
+		},
+		onResult: ({ result }) => {
+			updateResult = result;
+			loading = false;
+
+			console.log(updateResult);
+			if (result.type === 'failure') {
+				toast('Updating profile failed', {
+					description: result.data.message
+				});
+			} else if (result.type === 'success') {
+				toast('Profile succesfully updated.');
+			}
+		}
+	};
 
 	const showPreview = (event) => {
 		const target = event.target;
@@ -15,8 +39,6 @@
 			preview.src = src;
 		}
 	};
-
-	$: console.log;
 </script>
 
 <Form.Root
@@ -27,9 +49,9 @@
 	class="space-y-8"
 	debug={true}
 	enctype="multipart/form-data"
+	{options}
 >
 	<div class=" w-full max-w-lg">
-		<label for="avatar" class="label pb-1 font-medium"> Profile picture </label>
 		<label for="avatar" class="avatar w-32 rounded-full hover:cursor-pointer">
 			<!-- Add an pencil for editing? -->
 			<!-- <label for="avatar" class="absolute -right-0.5 bottom-0.5 hover:cursor-pointer">
@@ -56,20 +78,25 @@
 		/>
 	</div>
 	<Form.Item>
-		<Form.Field {config} name="username">
-			<Form.Label>Username</Form.Label>
-			<Form.Input placeholder="@Jeffreyyvdb" />
-			<Form.Description>
-				This is your public display name. It can be your real name or a pseudonym. You can only
-				change this once every 30 days.
-			</Form.Description>
+		<Form.Field {config} name="fullname">
+			<Form.Label>Name</Form.Label>
+			<Form.Input placeholder="John Doe" />
+			<Form.Description>This is your display name.</Form.Description>
 			<Form.Validation />
 		</Form.Field>
 	</Form.Item>
+
 	<Form.Item>
+		<Form.Field {config} name="username">
+			<Form.Label>Username</Form.Label>
+			<Form.Input placeholder="@JohnDoe" />
+			<Form.Validation />
+		</Form.Field>
+	</Form.Item>
+	<!-- <Form.Item>
 		<Form.Field {config} name="email">
 			<Form.Label>Email</Form.Label>
-			<Form.Select>
+			<Form.Select disabled>
 				<Form.SelectTrigger placeholder="Select a verified email to display" />
 				<Form.SelectContent>
 					<Form.SelectItem value="m@example.com" label="m@example.com"
@@ -87,11 +114,15 @@
 			</Form.Description>
 			<Form.Validation />
 		</Form.Field>
-	</Form.Item>
+	</Form.Item> -->
 	<Form.Item>
 		<Form.Field {config} name="bio">
 			<Form.Label>Bio</Form.Label>
-			<Form.Textarea placeholder="Tell us a little bit about yourself" class="resize-none" />
+			<Form.Textarea
+				disabled
+				placeholder="Tell us a little bit about yourself"
+				class="resize-none"
+			/>
 			<Form.Description>
 				You can <span>@mention</span> other users and organizations to link to them.
 			</Form.Description>
@@ -106,5 +137,13 @@
 			<Form.Validation />
 		</Form.Field>
 	</Form.Item>
-	<Form.Button>Update profile</Form.Button>
+
+	<Form.Button disabled={loading}>
+		{#if loading}
+			<Reload class="mr-2 h-4 w-4 animate-spin" />
+			Please wait
+		{:else}
+			Update Profile
+		{/if}
+	</Form.Button>
 </Form.Root>

@@ -24,6 +24,22 @@ export const actions: Actions = {
 		console.log("Formdata: ",formData)
 
 
+		
+		const session = await event.locals.getSession()
+  
+
+		const { error } = await event.locals.supabase.from('profiles').upsert({
+		  id: session?.user.id,
+		  full_name: form.data.fullname,
+		  username: form.data.username,
+		  website: form.data.website,
+		  updated_at: new Date(),
+		})
+  
+		if (error) {
+		  return fail(500, {form})
+		}
+
 		// https://superforms.rocks/faq#how-to-handle-file-uploads
 		const file = formData.get('avatar');
 		if (file instanceof File) {
