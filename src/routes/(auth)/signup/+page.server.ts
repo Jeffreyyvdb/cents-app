@@ -10,7 +10,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions ={ 
-    default: async ({ request, url, locals: {supabase}  }) => {
+    signup: async ({ request, url, locals  }) => {
         const form = await superValidate(request, signUpSchema);
 
         if(!form.valid){
@@ -20,7 +20,8 @@ export const actions ={
         const email = form.data.email
         const password = form.data.password
 
-        const { error } = await supabase.auth.signUp({
+        // Register the account
+        const { error, data } = await locals.supabase.auth.signUp({
             email,
             password,
             options: { emailRedirectTo: `${url.origin}/auth/callback`}
@@ -30,6 +31,10 @@ export const actions ={
             return fail(500, { message: error.message, succes: false, email, form})
         }
 
-        redirect(303 , "/");
+        // Fill the profile with data?
+        console.log(data);
+
+
+        redirect(303 , "/signin");
     }
 }
