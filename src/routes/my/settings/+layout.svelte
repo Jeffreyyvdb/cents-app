@@ -11,11 +11,13 @@
 		},
 		{
 			title: 'Account',
-			href: '/my/settings/account'
+			href: '/my/settings/account',
+			disabled: true
 		},
 		{
 			title: 'Security',
-			href: '/my/settings/security'
+			href: '/my/settings/security',
+			disabled: true
 		}
 	];
 </script>
