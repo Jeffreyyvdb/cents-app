@@ -50,7 +50,7 @@
 				{#if data.session}
 					<a href="/my/settings/profile" on:click={() => (open = !open)} class="flex-start flex">
 						<Avatar.Root>
-							<Avatar.Image src={avatarUrl} alt="Account" />
+							<Avatar.Image src={avatarUrl} class="object-cover" alt="Account" />
 							<Avatar.Fallback>JB</Avatar.Fallback>
 						</Avatar.Root>
 						<span class="ml-4 leading-[40px]">{profileName}</span>

@@ -84,7 +84,7 @@
 
 					<a href="/my/settings/profile" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
-							<Avatar.Image src={avatarUrl ?? 'https://picsum.photos/200'} alt="Profile" />
+							<Avatar.Image src={avatarUrl ?? 'https://picsum.photos/200'} class="object-cover" alt="Profile" />
 							<Avatar.Fallback>¢</Avatar.Fallback>
 						</Avatar.Root>
 					</a>

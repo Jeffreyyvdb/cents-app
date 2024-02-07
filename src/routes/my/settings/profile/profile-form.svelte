@@ -1,24 +1,35 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
+	import { supabaseClient } from '$lib/supabase';
+	import type { FormOptions } from 'formsnap';
+	import { Reload } from 'radix-icons-svelte';
+	import { createEventDispatcher } from 'svelte';
+	import { toast } from 'svelte-sonner';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { profileFormSchema } from './schema';
-	import type { FormOptions } from 'formsnap';
-	import { toast } from 'svelte-sonner';
-	import { Reload } from 'radix-icons-svelte';
+	import { generateDefaultAvatarUrl } from '$lib/utils';
+	import { invalidateAll } from '$app/navigation';
 
-	export let data: SuperValidated<typeof profileFormSchema>;
+	export let form: SuperValidated<typeof profileFormSchema>;
+	export let url: string | null = '';
+	export let userId: string = '';
+
 	let loading = false;
 	let updateResult;
+	const dispatch = createEventDispatcher();
+	let files: FileList | null = null;
+	let uploading = false;
+	let avatarUrl: string | null = null;
 
 	const options: FormOptions<typeof profileFormSchema> = {
-		onSubmit(input) {
+		async onSubmit(input) {
 			loading = true;
 		},
 		onResult: ({ result }) => {
 			updateResult = result;
 			loading = false;
 
-			console.log(updateResult);
 			if (result.type === 'failure') {
 				toast('Updating profile failed', {
 					description: result.data.message
@@ -29,29 +40,66 @@
 		}
 	};
 
-	const showPreview = (event: Event) => {
-		const target = event.target as HTMLInputElement;
+	const uploadImage = async () => {
+		try {
+			uploading = true;
 
-		if (!target.files) {
-			return;
-		}
+			if (!files || files.length === 0) {
+				throw new Error('You must select an image to upload');
+			}
 
-		if (target.files.length > 0) {
-			const src = URL.createObjectURL(target.files[0]);
-			// Cant we do this with binding?
-			const preview = document.getElementById('avatar-preview') as HTMLImageElement;
-			preview.src = src;
+			// Generate name with userId and file extension
+			const fileExt = files[0].name.split('.').pop();
+			const filePath = `avatars/${userId}/${Math.random()}.${fileExt}`;
+
+			const { error } = await supabaseClient.storage
+				.from('avatars')
+				.upload(filePath, files[0], { upsert: true });
+
+			if (error) {
+				throw error;
+			}
+
+			url = filePath;
+
+			setTimeout(() => {
+				dispatch('upload');
+			}, 100);
+		} catch (error) {
+			if (error instanceof Error) {
+				alert(error.message);
+			}
+		} finally {
+			uploading = false;
 		}
 	};
+
+	const downloadImage = async (path: string) => {
+		try {
+			const { data, error } = await supabaseClient.storage.from('avatars').download(path);
+
+			if (error) {
+				throw error;
+			}
+
+			avatarUrl = URL.createObjectURL(data);
+		} catch (error) {
+			console.error('Error downloading avatar', error);
+		}
+	};
+
+	$: if (url) {
+		downloadImage(url);
+	}
 </script>
 
 <Form.Root
-	form={data}
+	{form}
 	schema={profileFormSchema}
 	let:config
 	method="POST"
 	class="space-y-8"
-	debug={true}
+	debug={dev}
 	enctype="multipart/form-data"
 	{options}
 >
@@ -61,25 +109,21 @@
 			<!-- <label for="avatar" class="absolute -right-0.5 bottom-0.5 hover:cursor-pointer">
 			<span><Icon src={Pencil} class="h-4 w-4" /></span>
 		</label> -->
-			<div class="w-32 rounded-full border">
+			<div class="h-32 w-32 rounded-full border">
+					<img
+						src={avatarUrl ?? generateDefaultAvatarUrl(form.data.fullname)}
+						alt={avatarUrl ? 'Avatar' : 'No image'}
+						class="w-32 h-32 rounded-full border object-cover"
+						id="avatar-preview"
+					/>
 				<!-- How to show fixed size an shape of picture -->
-				<img
-					src="https://picsum.photos/200"
-					class="w-32 rounded-full border"
-					alt="user avatar"
-					id="avatar-preview"
-				/>
 			</div>
 		</label>
-		<input
-			type="file"
-			name="avatar"
-			id="avatar"
-			value=""
-			accept="image/*"
-			hidden
-			on:change={showPreview}
-		/>
+
+		<input type="file" id="avatar" accept="image/*" hidden bind:files on:change={uploadImage} />
+
+		<!-- The input that will be sent to the server  -->
+		<input type="hidden" name="avatarUrl" value={url} />
 	</div>
 	<Form.Item>
 		<Form.Field {config} name="fullname">
