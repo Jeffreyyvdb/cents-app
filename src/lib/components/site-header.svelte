@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { supabaseClient } from '$lib/supabase';
 	import ModeToggle from '$lib/components/move-toggle.svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { siteConfig } from '$lib/config/site';
+	import { supabaseClient } from '$lib/supabase';
 	import { cn } from '$lib/utils';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { onMount } from 'svelte';
 	import type { PageData } from '../../routes/$types';
 	import CommandMenu from './command-menu.svelte';
 	import { Icons } from './icons';
@@ -53,7 +52,7 @@
 >
 	<div class="container flex h-14 max-w-screen-2xl items-center">
 		<MainNav />
-		<MobileNav {data} {profileName} {avatarUrl} />
+		<MobileNav {data} {avatarUrl} />
 		<div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
 			<div class="w-full flex-1 md:w-auto md:flex-none">
 				<CommandMenu />
@@ -84,7 +83,11 @@
 
 					<a href="/my/settings/profile" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
-							<Avatar.Image src={avatarUrl ?? 'https://picsum.photos/200'} class="object-cover" alt="Profile" />
+							<Avatar.Image
+								src={avatarUrl ?? 'https://picsum.photos/200'}
+								class="object-cover"
+								alt="Profile"
+							/>
 							<Avatar.Fallback>¢</Avatar.Fallback>
 						</Avatar.Root>
 					</a>

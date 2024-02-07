@@ -9,7 +9,7 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { profileFormSchema } from './schema';
 	import { generateDefaultAvatarUrl } from '$lib/utils';
-	import { invalidateAll } from '$app/navigation';
+	import { fullname } from '$lib/stores';
 
 	export let form: SuperValidated<typeof profileFormSchema>;
 	export let url: string | null = '';
@@ -26,16 +26,19 @@
 		async onSubmit(input) {
 			loading = true;
 		},
-		onResult: ({ result }) => {
-			updateResult = result;
+		onResult: (event) => {
+			updateResult = event.result;
 			loading = false;
 
-			if (result.type === 'failure') {
+			if (updateResult.type === 'failure') {
 				toast('Updating profile failed', {
-					description: result.data.message
+					description: updateResult?.data?.message
 				});
-			} else if (result.type === 'success') {
+			} else if (updateResult.type === 'success') {
 				toast('Profile succesfully updated.');
+				// also update the user store to reflect changes to name/avatar in the navigation
+				let newName = updateResult?.data?.form?.data?.fullname;
+				fullname.set(newName);
 			}
 		}
 	};
@@ -110,12 +113,12 @@
 			<span><Icon src={Pencil} class="h-4 w-4" /></span>
 		</label> -->
 			<div class="h-32 w-32 rounded-full border">
-					<img
-						src={avatarUrl ?? generateDefaultAvatarUrl(form.data.fullname)}
-						alt={avatarUrl ? 'Avatar' : 'No image'}
-						class="w-32 h-32 rounded-full border object-cover"
-						id="avatar-preview"
-					/>
+				<img
+					src={avatarUrl ?? generateDefaultAvatarUrl(form.data.fullname)}
+					alt={avatarUrl ? 'Avatar' : 'No image'}
+					class="h-32 w-32 rounded-full border object-cover"
+					id="avatar-preview"
+				/>
 				<!-- How to show fixed size an shape of picture -->
 			</div>
 		</label>

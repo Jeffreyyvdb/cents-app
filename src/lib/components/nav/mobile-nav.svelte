@@ -10,10 +10,15 @@
 	import { Button } from '../ui/button';
 	import * as Sheet from '../ui/sheet';
 	import MobileLink from './mobile-link.svelte';
+	import { fullname } from '$lib/stores';
 
 	export let data: PageData;
 	export let avatarUrl: string | null = null;
-	export let profileName: string;
+	let profileName: string;
+	
+	fullname.subscribe((value) => {
+		profileName = value;
+	});
 
 	let open = false;
 

@@ -2,6 +2,7 @@ import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 import { profileFormSchema } from './schema';
 import { fail, type Actions, redirect } from '@sveltejs/kit';
+import { fullname } from '$lib/stores';
 
 export const load: PageServerLoad = async (event) => {
 	const form = await superValidate(profileFormSchema);
@@ -41,7 +42,7 @@ export const actions: Actions = {
 
 		const session = await event.locals.getSession();
 
-		let avatarUrl = formData.get('avatarUrl');
+		const avatarUrl = formData.get('avatarUrl');
 
 		const { error } = await event.locals.supabase.from('profiles').upsert({
 			id: session?.user.id,
