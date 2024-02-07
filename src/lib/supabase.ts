@@ -17,3 +17,23 @@ export const downloadImageFromSb = async (path: string): Promise<string> => {
 		throw error;
 	}
 };
+
+export const uploadImageToSb = async (files: FileList, userId: string): Promise<string> => {
+	if (!files || files.length === 0) {
+		throw new Error('You must select an image to upload');
+	}
+
+	// Generate name with userId and file extension
+	const fileExt = files[0].name.split('.').pop();
+	const filePath = `avatars/${userId}/${Math.random()}.${fileExt}`;
+
+	const { error } = await supabaseClient.storage
+		.from('avatars')
+		.upload(filePath, files[0], { upsert: true });
+
+	if (error) {
+		throw error;
+	}
+
+	return filePath;
+};

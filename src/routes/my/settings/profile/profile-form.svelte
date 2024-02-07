@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
-	import { supabaseClient, downloadImageFromSb } from '$lib/supabase';
+	import { downloadImageFromSb, uploadImageToSb } from '$lib/supabase';
+	import { generateDefaultAvatarUrl } from '$lib/utils';
 	import type { FormOptions } from 'formsnap';
 	import { Reload } from 'radix-icons-svelte';
-	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { profileFormSchema } from './schema';
-	import { generateDefaultAvatarUrl } from '$lib/utils';
 
 	export let form: SuperValidated<typeof profileFormSchema>;
 	export let url: string | null = '';
@@ -16,7 +15,6 @@
 
 	let loading = false;
 	let updateResult;
-	const dispatch = createEventDispatcher();
 	let files: FileList | null = null;
 	let uploading = false;
 	let avatarUrl: string | null = null;
@@ -42,38 +40,18 @@
 		}
 	};
 
-	const uploadImage = async () => {
-		try {
-			uploading = true;
-
-			if (!files || files.length === 0) {
-				throw new Error('You must select an image to upload');
-			}
-
-			// Generate name with userId and file extension
-			const fileExt = files[0].name.split('.').pop();
-			const filePath = `avatars/${userId}/${Math.random()}.${fileExt}`;
-
-			const { error } = await supabaseClient.storage
-				.from('avatars')
-				.upload(filePath, files[0], { upsert: true });
-
-			if (error) {
-				throw error;
-			}
-
-			url = filePath;
-
-			setTimeout(() => {
-				dispatch('upload');
-			}, 100);
-		} catch (error) {
-			if (error instanceof Error) {
-				alert(error.message);
-			}
-		} finally {
-			uploading = false;
+	const upload = async () => {
+		if (!files) {
+			throw new Error('There are no files uploaded.');
 		}
+		uploading = true;
+		url = await uploadImageToSb(files, userId);
+		uploading = false;
+
+		// dispatch??
+		// setTimeout(() => {
+		// 		dispatch('upload');
+		// 	}, 100);
 	};
 
 	$: if (url) {
@@ -94,10 +72,6 @@
 >
 	<div class=" w-full max-w-lg">
 		<label for="avatar" class="avatar w-32 rounded-full hover:cursor-pointer">
-			<!-- Add an pencil for editing? -->
-			<!-- <label for="avatar" class="absolute -right-0.5 bottom-0.5 hover:cursor-pointer">
-			<span><Icon src={Pencil} class="h-4 w-4" /></span>
-		</label> -->
 			<div class="h-32 w-32 rounded-full border">
 				<img
 					src={avatarUrl ?? generateDefaultAvatarUrl(form.data.fullname)}
@@ -105,11 +79,10 @@
 					class="h-32 w-32 rounded-full border object-cover"
 					id="avatar-preview"
 				/>
-				<!-- How to show fixed size an shape of picture -->
 			</div>
 		</label>
 
-		<input type="file" id="avatar" accept="image/*" hidden bind:files on:change={uploadImage} />
+		<input type="file" id="avatar" accept="image/*" hidden bind:files on:change={upload} />
 
 		<!-- The input that will be sent to the server  -->
 		<input type="hidden" name="avatarUrl" value={url} />
