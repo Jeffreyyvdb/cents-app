@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
-	import { supabaseClient } from '$lib/supabase';
+	import { supabaseClient, downloadImageFromSb } from '$lib/supabase';
 	import type { FormOptions } from 'formsnap';
 	import { Reload } from 'radix-icons-svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -9,7 +9,6 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { profileFormSchema } from './schema';
 	import { generateDefaultAvatarUrl } from '$lib/utils';
-	import { fullname } from '$lib/stores';
 
 	export let form: SuperValidated<typeof profileFormSchema>;
 	export let url: string | null = '';
@@ -37,8 +36,8 @@
 			} else if (updateResult.type === 'success') {
 				toast('Profile succesfully updated.');
 				// also update the user store to reflect changes to name/avatar in the navigation
-				let newName = updateResult?.data?.form?.data?.fullname;
-				fullname.set(newName);
+				// let newName = updateResult?.data?.form?.data?.fullname;
+				// fullname.set(newName);
 			}
 		}
 	};
@@ -77,22 +76,9 @@
 		}
 	};
 
-	const downloadImage = async (path: string) => {
-		try {
-			const { data, error } = await supabaseClient.storage.from('avatars').download(path);
-
-			if (error) {
-				throw error;
-			}
-
-			avatarUrl = URL.createObjectURL(data);
-		} catch (error) {
-			console.error('Error downloading avatar', error);
-		}
-	};
-
 	$: if (url) {
-		downloadImage(url);
+		// Cannot use await here.
+		downloadImageFromSb(url).then((imageUrl) => (avatarUrl = imageUrl));
 	}
 </script>
 
@@ -144,28 +130,6 @@
 			<Form.Validation />
 		</Form.Field>
 	</Form.Item>
-	<!-- <Form.Item>
-		<Form.Field {config} name="email">
-			<Form.Label>Email</Form.Label>
-			<Form.Select disabled>
-				<Form.SelectTrigger placeholder="Select a verified email to display" />
-				<Form.SelectContent>
-					<Form.SelectItem value="m@example.com" label="m@example.com"
-						>m@example.com
-					</Form.SelectItem>
-					<Form.SelectItem value="m@google.com" label="m@google.com">m@google.com</Form.SelectItem>
-					<Form.SelectItem value="m@support.com" label="m@support.com"
-						>m@support.com
-					</Form.SelectItem>
-				</Form.SelectContent>
-			</Form.Select>
-			<Form.Description>
-				You can manage verified email addresses in your <a href="/examples/forms">email settings</a
-				>.
-			</Form.Description>
-			<Form.Validation />
-		</Form.Field>
-	</Form.Item> -->
 	<Form.Item>
 		<Form.Field {config} name="bio">
 			<Form.Label>Bio</Form.Label>

@@ -2,7 +2,6 @@ import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 import { profileFormSchema } from './schema';
 import { fail, type Actions, redirect } from '@sveltejs/kit';
-import { fullname } from '$lib/stores';
 
 export const load: PageServerLoad = async (event) => {
 	const form = await superValidate(profileFormSchema);

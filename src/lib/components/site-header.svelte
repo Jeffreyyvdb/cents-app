@@ -52,7 +52,7 @@
 >
 	<div class="container flex h-14 max-w-screen-2xl items-center">
 		<MainNav />
-		<MobileNav {data} {avatarUrl} />
+		<MobileNav />
 		<div class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
 			<div class="w-full flex-1 md:w-auto md:flex-none">
 				<CommandMenu />
