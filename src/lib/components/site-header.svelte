@@ -27,7 +27,9 @@
 		};
 	};
 
-	$: downloadImageFromSb(profile.avatar_url).then((url) => (downloadedAvatarUrl = url));
+	$: if (profile?.avatar_url) {
+		downloadImageFromSb(profile.avatar_url).then((url) => (downloadedAvatarUrl = url));
+	}
 </script>
 
 <header
