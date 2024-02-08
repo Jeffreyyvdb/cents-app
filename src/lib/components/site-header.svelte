@@ -1,21 +1,23 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import ModeToggle from '$lib/components/move-toggle.svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { siteConfig } from '$lib/config/site';
-	import { supabaseClient } from '$lib/supabase';
+	import { downloadImageFromSb } from '$lib/supabase';
 	import { cn } from '$lib/utils';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import type { PageData } from '../../routes/$types';
 	import CommandMenu from './command-menu.svelte';
 	import { Icons } from './icons';
 	import MainNav from './nav/main-nav.svelte';
 	import MobileNav from './nav/mobile-nav.svelte';
 	import { Button, buttonVariants } from './ui/button';
 
-	export let data: PageData;
-
 	let loading = false;
+	let downloadedAvatarUrl = '';
+
+	let { profile, session } = $page.data;
+	$: ({ profile, session } = $page.data);
 
 	const handleSignOut: SubmitFunction = () => {
 		loading = true;
@@ -25,26 +27,7 @@
 		};
 	};
 
-	const downloadImage = async (blobUrl: string) => {
-		try {
-			const { data, error } = await supabaseClient.storage.from('avatars').download(blobUrl);
-			if (error) {
-				throw error;
-			}
-
-			avatarUrl = URL.createObjectURL(data);
-		} catch (error) {
-			if (error instanceof Error) {
-				console.log('Error downloading image: ', error.message);
-			}
-		}
-	};
-
-	let avatarUrl: string | null = null;
-	const blobUrl = data.profile?.avatar_url;
-	$: if (blobUrl) downloadImage(blobUrl);
-
-	const profileName = data.profile?.full_name;
+	$: downloadImageFromSb(profile.avatar_url).then((url) => (downloadedAvatarUrl = url));
 </script>
 
 <header
@@ -74,7 +57,7 @@
 				</a>
 				<ModeToggle />
 				<!-- Avatar -->
-				{#if data.session}
+				{#if session}
 					<form method="POST" action="/signout" use:enhance={handleSignOut}>
 						<Button type="submit" disabled={loading} variant="ghost" class="hidden md:block"
 							>Sign out</Button
@@ -84,7 +67,7 @@
 					<a href="/my/settings/profile" class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
 							<Avatar.Image
-								src={avatarUrl ?? 'https://picsum.photos/200'}
+								src={downloadedAvatarUrl ?? 'https://picsum.photos/200'}
 								class="object-cover"
 								alt="Profile"
 							/>

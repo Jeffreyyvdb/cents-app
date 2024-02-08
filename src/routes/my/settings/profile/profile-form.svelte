@@ -8,15 +8,17 @@
 	import { toast } from 'svelte-sonner';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { profileFormSchema } from './schema';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 
 	export let form: SuperValidated<typeof profileFormSchema>;
 	export let url: string | null = '';
 	export let userId: string = '';
 
 	let loading = false;
+	let uploading = false;
+	let downloading = false;
 	let updateResult;
 	let files: FileList | null = null;
-	let uploading = false;
 	let avatarUrl: string | null = null;
 
 	const options: FormOptions<typeof profileFormSchema> = {
@@ -33,9 +35,6 @@
 				});
 			} else if (updateResult.type === 'success') {
 				toast('Profile succesfully updated.');
-				// also update the user store to reflect changes to name/avatar in the navigation
-				// let newName = updateResult?.data?.form?.data?.fullname;
-				// fullname.set(newName);
 			}
 		}
 	};
@@ -47,16 +46,13 @@
 		uploading = true;
 		url = await uploadImageToSb(files, userId);
 		uploading = false;
-
-		// dispatch??
-		// setTimeout(() => {
-		// 		dispatch('upload');
-		// 	}, 100);
 	};
 
 	$: if (url) {
+		downloading = true;
 		// Cannot use await here.
 		downloadImageFromSb(url).then((imageUrl) => (avatarUrl = imageUrl));
+		downloading = false;
 	}
 </script>
 
@@ -72,18 +68,20 @@
 >
 	<div class=" w-full max-w-lg">
 		<label for="avatar" class="avatar w-32 rounded-full hover:cursor-pointer">
-			<div class="h-32 w-32 rounded-full border">
-				<img
-					src={avatarUrl ?? generateDefaultAvatarUrl(form.data.fullname)}
-					alt={avatarUrl ? 'Avatar' : 'No image'}
-					class="h-32 w-32 rounded-full border object-cover"
-					id="avatar-preview"
-				/>
+			<div class="h-32 w-32 rounded-full">
+				{#if uploading}
+					<Skeleton class="h-32 w-32 rounded-full" />
+				{:else}
+					<img
+						src={avatarUrl ?? generateDefaultAvatarUrl(form.data.fullname)}
+						alt={avatarUrl ? 'Avatar' : 'No image'}
+						class="h-32 w-32 rounded-full border object-cover"
+						id="avatar-preview"
+					/>
+				{/if}
 			</div>
 		</label>
-
 		<input type="file" id="avatar" accept="image/*" hidden bind:files on:change={upload} />
-
 		<!-- The input that will be sent to the server  -->
 		<input type="hidden" name="avatarUrl" value={url} />
 	</div>
