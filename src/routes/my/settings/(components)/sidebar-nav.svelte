@@ -6,7 +6,7 @@
 	import { crossfade } from 'svelte/transition';
 
 	let className: string | undefined | null = undefined;
-	export let items: { href: string; title: string }[];
+	export let items: { href: string; title: string; disabled: boolean }[];
 	export { className as class };
 
 	const [send, receive] = crossfade({
@@ -22,8 +22,12 @@
 		<Button
 			href={item.href}
 			variant="ghost"
-			class={cn(!isActive && 'hover:underline', 'relative justify-start hover:bg-transparent')}
-			data-sveltekit-noscroll
+			class={cn(
+				!isActive && !item.disabled && 'hover:underline',
+				'relative justify-start hover:bg-transparent',
+				item.disabled ? 'cursor-default text-gray-400 hover:text-gray-400' : ''
+			)}
+			data-sveltekit-t
 		>
 			{#if isActive}
 				<div

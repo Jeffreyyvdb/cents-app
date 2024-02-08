@@ -1,81 +1,89 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
+	import { downloadImageFromSb, uploadImageToSb } from '$lib/supabase';
+	import { generateDefaultAvatarUrl } from '$lib/utils';
+	import type { FormOptions } from 'formsnap';
+	import { Reload } from 'radix-icons-svelte';
+	import { toast } from 'svelte-sonner';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { profileFormSchema } from './schema';
-	import type { FormOptions } from 'formsnap';
-	import { toast } from 'svelte-sonner';
-	import { Reload } from 'radix-icons-svelte';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 
-	export let data: SuperValidated<typeof profileFormSchema>;
+	export let form: SuperValidated<typeof profileFormSchema>;
+	export let url: string | null = '';
+	export let userId: string = '';
+
 	let loading = false;
+	let uploading = false;
+	let downloading = false;
 	let updateResult;
+	let files: FileList | null = null;
+	let avatarUrl: string | null = null;
 
-	const options: FormOptions<typeof schema> = {
-		onSubmit(input) {
+	const options: FormOptions<typeof profileFormSchema> = {
+		async onSubmit(input) {
 			loading = true;
 		},
-		onResult: ({ result }) => {
-			updateResult = result;
+		onResult: (event) => {
+			updateResult = event.result;
 			loading = false;
 
-			console.log(updateResult);
-			if (result.type === 'failure') {
+			if (updateResult.type === 'failure') {
 				toast('Updating profile failed', {
-					description: result.data.message
+					description: updateResult?.data?.message
 				});
-			} else if (result.type === 'success') {
+			} else if (updateResult.type === 'success') {
 				toast('Profile succesfully updated.');
 			}
 		}
 	};
 
-	const showPreview = (event) => {
-		const target = event.target;
-		const files = target.files;
-		if (files.length > 0) {
-			const src = URL.createObjectURL(files[0]);
-			// Cant we do this with binding?
-			const preview = document.getElementById('avatar-preview') as HTMLImageElement;
-			preview.src = src;
+	const upload = async () => {
+		if (!files) {
+			throw new Error('There are no files uploaded.');
 		}
+		uploading = true;
+		url = await uploadImageToSb(files, userId);
+		uploading = false;
 	};
+
+	$: if (url) {
+		downloading = true;
+		// Cannot use await here.
+		downloadImageFromSb(url).then((imageUrl) => (avatarUrl = imageUrl));
+		downloading = false;
+	}
 </script>
 
 <Form.Root
-	form={data}
+	{form}
 	schema={profileFormSchema}
 	let:config
 	method="POST"
 	class="space-y-8"
-	debug={true}
+	debug={dev}
 	enctype="multipart/form-data"
 	{options}
 >
 	<div class=" w-full max-w-lg">
 		<label for="avatar" class="avatar w-32 rounded-full hover:cursor-pointer">
-			<!-- Add an pencil for editing? -->
-			<!-- <label for="avatar" class="absolute -right-0.5 bottom-0.5 hover:cursor-pointer">
-			<span><Icon src={Pencil} class="h-4 w-4" /></span>
-		</label> -->
-			<div class="w-32 rounded-full border">
-				<!-- How to show fixed size an shape of picture -->
-				<img
-					src="https://picsum.photos/200"
-					class="w-32 rounded-full border"
-					alt="user avatar"
-					id="avatar-preview"
-				/>
+			<div class="h-32 w-32 rounded-full">
+				{#if uploading}
+					<Skeleton class="h-32 w-32 rounded-full" />
+				{:else}
+					<img
+						src={avatarUrl ?? generateDefaultAvatarUrl(form.data.fullname)}
+						alt={avatarUrl ? 'Avatar' : 'No image'}
+						class="h-32 w-32 rounded-full border object-cover"
+						id="avatar-preview"
+					/>
+				{/if}
 			</div>
 		</label>
-		<input
-			type="file"
-			name="avatar"
-			id="avatar"
-			value=""
-			accept="image/*"
-			hidden
-			on:change={showPreview}
-		/>
+		<input type="file" id="avatar" accept="image/*" hidden bind:files on:change={upload} />
+		<!-- The input that will be sent to the server  -->
+		<input type="hidden" name="avatarUrl" value={url} />
 	</div>
 	<Form.Item>
 		<Form.Field {config} name="fullname">
@@ -93,28 +101,6 @@
 			<Form.Validation />
 		</Form.Field>
 	</Form.Item>
-	<!-- <Form.Item>
-		<Form.Field {config} name="email">
-			<Form.Label>Email</Form.Label>
-			<Form.Select disabled>
-				<Form.SelectTrigger placeholder="Select a verified email to display" />
-				<Form.SelectContent>
-					<Form.SelectItem value="m@example.com" label="m@example.com"
-						>m@example.com
-					</Form.SelectItem>
-					<Form.SelectItem value="m@google.com" label="m@google.com">m@google.com</Form.SelectItem>
-					<Form.SelectItem value="m@support.com" label="m@support.com"
-						>m@support.com
-					</Form.SelectItem>
-				</Form.SelectContent>
-			</Form.Select>
-			<Form.Description>
-				You can manage verified email addresses in your <a href="/examples/forms">email settings</a
-				>.
-			</Form.Description>
-			<Form.Validation />
-		</Form.Field>
-	</Form.Item> -->
 	<Form.Item>
 		<Form.Field {config} name="bio">
 			<Form.Label>Bio</Form.Label>

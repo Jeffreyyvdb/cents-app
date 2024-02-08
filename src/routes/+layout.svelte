@@ -17,9 +17,6 @@
 
 	export let data: PageData;
 
-	let { supabase, session } = data;
-	$: ({ supabase, session } = data);
-
 	onMount(() => {
 		const {
 			data: { subscription }
@@ -37,7 +34,7 @@
 <ModeWatcher />
 
 <div class="relative flex min-h-screen flex-col bg-background" id="page" data-vaul-wrapper>
-	<SiteHeader {data} />
+	<SiteHeader />
 	<div class="flex-1">
 		<div class="container relative">
 			<slot />

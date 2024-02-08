@@ -23,7 +23,7 @@
 			.min(2, 'Name must be at least 2 characters.')
 			.max(30, 'Name must not be longer than 30 characters'),
 		// Hack: https://github.com/colinhacks/zod/issues/2280
-		language: z.enum(Object.keys(languages) as [Language, ...Language[]])
+		language: z.enum(Object.keys(languages) as [Language, ...Language[]]) 
 	});
 
 	export type AccountFormSchema = typeof accountFormSchema;
@@ -33,6 +33,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { cn } from '$lib/utils';
+	import { dev } from '$app/environment';
 
 	export let data: SuperValidated<AccountFormSchema>;
 </script>
@@ -43,7 +44,7 @@
 	let:config
 	schema={accountFormSchema}
 	form={data}
-	debug={true}
+	debug={dev}
 >
 	<Form.Item>
 		<Form.Field name="name" {config}>

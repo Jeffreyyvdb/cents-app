@@ -1,23 +1,23 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
+	import * as Avatar from '$lib/components/ui/avatar';
+	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
+	import * as Sheet from '$lib/components/ui/sheet';
 	import { docsConfig } from '$lib/config/docs';
 	import { siteConfig } from '$lib/config/site';
+	import { downloadImageFromSb } from '$lib/supabase';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import type { PageData } from '../../../routes/$types';
 	import { Icons } from '../icons';
-	import * as Avatar from '../ui/avatar';
-	import { Button } from '../ui/button';
-	import * as Sheet from '../ui/sheet';
 	import MobileLink from './mobile-link.svelte';
 
-	export let data: PageData;
-	export let avatarUrl: string | null = null;
-	export let profileName: string;
-
 	let open = false;
-
 	let loading = false;
+	let downloadedAvatarUrl = '';
+
+	let { profile, session } = $page.data;
+	$: ({ profile, session } = $page.data);
 
 	const handleSignOut: SubmitFunction = () => {
 		loading = true;
@@ -27,6 +27,10 @@
 			update();
 		};
 	};
+
+	$: if (profile?.avatar_url) {
+		downloadImageFromSb(profile.avatar_url).then((url) => (downloadedAvatarUrl = url));
+	}
 </script>
 
 <Sheet.Root bind:open>
@@ -47,13 +51,13 @@
 		</MobileLink>
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
-				{#if data.session}
+				{#if session}
 					<a href="/my/settings/profile" on:click={() => (open = !open)} class="flex-start flex">
 						<Avatar.Root>
-							<Avatar.Image src={avatarUrl} alt="Account" />
-							<Avatar.Fallback>JB</Avatar.Fallback>
+							<Avatar.Image src={downloadedAvatarUrl} class="object-cover" alt="Account" />
+							<Avatar.Fallback>NT</Avatar.Fallback>
 						</Avatar.Root>
-						<span class="ml-4 leading-[40px]">{profileName}</span>
+						<span class="ml-4 leading-[40px]">{profile.full_name}</span>
 					</a>
 
 					<form method="POST" action="/signout" use:enhance={handleSignOut}>
@@ -75,29 +79,6 @@
 					{/if}
 				{/each}
 			</div>
-			<!-- <div class="flex flex-col space-y-2">
-				{#each docsConfig.sidebarNav as navItem, index (index)}
-					<div class="flex flex-col space-y-3 pt-6">
-						<h4 class="font-medium">{navItem.title}</h4>
-						{#if navItem?.items?.length}
-							{#each navItem.items as item}
-								{#if !item.disabled && item.href}
-									<MobileLink href={item.href} bind:open>
-										{item.title}
-										{#if item.label}
-											<span
-												class="ml-2 rounded-md bg-[#adfa1d] px-1.5 py-0.5 text-xs leading-none text-[#000000] no-underline group-hover:no-underline"
-											>
-												{item.label}
-											</span>
-										{/if}
-									</MobileLink>
-								{/if}
-							{/each}
-						{/if}
-					</div>
-				{/each}
-			</div> -->
 		</div>
 	</Sheet.Content>
 </Sheet.Root>

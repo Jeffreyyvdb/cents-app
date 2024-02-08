@@ -31,10 +31,6 @@ export const actions ={
             return fail(500, { message: error.message, succes: false, email, form})
         }
 
-        // Fill the profile with data?
-        console.log(data);
-
-
         redirect(303 , "/signin");
     }
 }
