@@ -47,9 +47,6 @@ dependencies:
   radix-icons-svelte:
     specifier: ^1.2.1
     version: 1.2.1
-  svelte-apexcharts:
-    specifier: ^1.0.2
-    version: 1.0.2(apexcharts@3.45.2)
   svelte-sonner:
     specifier: ^0.3.11
     version: 0.3.12(svelte@4.2.10)
@@ -2493,14 +2490,6 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
-
-  /svelte-apexcharts@1.0.2(apexcharts@3.45.2):
-    resolution: {integrity: sha512-6qlx4rE+XsonZ0FZudfwqOQ34Pq+3wpxgAD75zgEmGoYhYBJcwmikTuTf3o8ZBsZue9U/pAwhNy3ed1Bkq1gmA==}
-    peerDependencies:
-      apexcharts: ^3.19.2
-    dependencies:
-      apexcharts: 3.45.2
-    dev: false
 
   /svelte-check@3.6.3(postcss-load-config@5.0.2)(postcss@8.4.34)(svelte@4.2.10):
     resolution: {integrity: sha512-Q2nGnoysxUnB9KjnjpQLZwdjK62DHyW6nuH/gm2qteFnDk0lCehe/6z8TsIvYeKjC6luKaWxiNGyOcWiLLPSwA==}
