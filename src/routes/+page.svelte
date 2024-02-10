@@ -141,7 +141,7 @@
 	</section>
 
 	<!-- Chart -->
-	<section class="my-2 justify-center overflow-hidden">
+	<section class="my-2 justify-center overflow-hidden w-full h-[350px]">
 		<Card.Root class="p-2">
 			<div bind:this={chart} class=""></div>
 		</Card.Root>
