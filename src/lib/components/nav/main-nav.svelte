@@ -3,11 +3,11 @@
 	import { siteConfig } from '$lib/config/site';
 	import { cn } from '$lib/utils';
 	import { Icons } from '$lib/components/icons';
-	import { mainNav } from '$lib/types/nav';
+	import { allNav, mainNav } from '$lib/types/nav';
 </script>
 
 <div class="mr-4 hidden md:flex">
-	<a href="/" class="mr-6 flex items-center space-x-2">
+	<a href={allNav.Dashboard.href} class="mr-6 flex items-center space-x-2">
 		<Icons.logo class="h-6 w-6" />
 		<span class="hidden font-title text-2xl sm:inline-block">
 			{siteConfig.name}

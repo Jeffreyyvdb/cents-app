@@ -33,19 +33,19 @@ export const sideNav  = {
 export const allNav = {
 	['SignIn']: {
 		title: "Sign In",
-		href: "signin"
+		href: "/signin"
 	},
 	['SignUp']: {
 		title: "Sign Up",
-		href: "signup"
+		href: "/signup"
 	},
 	['SignOut']: {
 		title: "Sign Out",
-		href: "signout"
+		href: "/signout"
 	},
 	['Callback']: {
 		title: "Callback",
-		href: "callback"
+		href: "/callback"
 	},
 	...mainNav
 }

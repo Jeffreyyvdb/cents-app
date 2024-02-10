@@ -61,13 +61,13 @@
 				<ModeToggle />
 				<!-- Avatar -->
 				{#if session}
-					<form method="POST" action="/signout" use:enhance={handleSignOut}>
+					<form method="POST" action={allNav.SignOut.href} use:enhance={handleSignOut}>
 						<Button type="submit" disabled={loading} variant="ghost" class="hidden md:block"
 							>Sign out</Button
 						>
 					</form>
 
-					<a href="/my/settings/profile" class=" ml-2 hidden justify-between md:flex">
+					<a href={allNav.Settings.href} class=" ml-2 hidden justify-between md:flex">
 						<Avatar.Root>
 							<Avatar.Image
 								src={downloadedAvatarUrl ?? 'https://picsum.photos/200'}
