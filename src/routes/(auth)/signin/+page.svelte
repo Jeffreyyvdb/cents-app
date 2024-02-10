@@ -31,6 +31,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Cents app Sign in</title>
+</svelte:head>
+
 <section class="m-auto max-w-md">
 	<h1 class="mb-4 text-center font-title text-4xl leading-none md:text-5xl lg:text-6xl">
 		Sign in to ¢ents

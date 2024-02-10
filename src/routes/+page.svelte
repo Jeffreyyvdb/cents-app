@@ -130,6 +130,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Cent app dashboard</title>
+</svelte:head>
+
 <div class="mt-2">
 	<h1 class="text-center font-title text-4xl md:text-6xl">{siteConfig.name}</h1>
 	<h1 class="text-center text-2xl font-bold capitalize md:text-4xl">Main Wallet</h1>

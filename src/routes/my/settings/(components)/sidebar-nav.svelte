@@ -4,9 +4,26 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cubicInOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
+	
+
+	const items = [
+		{
+			title: 'Profile',
+			href: '/my/settings/profile'
+		},
+		{
+			title: 'Account',
+			href: '/my/settings/account',
+			disabled: true
+		},
+		{
+			title: 'Security',
+			href: '/my/settings/security',
+			disabled: true
+		}
+	];
 
 	let className: string | undefined | null = undefined;
-	export let items: { href: string; title: string; disabled: boolean }[];
 	export { className as class };
 
 	const [send, receive] = crossfade({
