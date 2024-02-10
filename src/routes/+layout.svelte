@@ -6,7 +6,6 @@
 	import { dev } from '$app/environment';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { inject } from '@vercel/analytics';
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/supabase';
 	import { invalidateAll } from '$app/navigation';
@@ -14,8 +13,6 @@
 
 	inject({ mode: dev ? 'development' : 'production' });
 	injectSpeedInsights();
-
-	export let data: PageData;
 
 	onMount(() => {
 		const {

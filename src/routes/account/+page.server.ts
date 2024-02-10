@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import type { PageServerLoad } from "./$types";
 import { updateAccountSchema } from './schema.js';
+import { allNav } from '$lib/types/nav';
 
 
 export const load : PageServerLoad = async ({  locals: {supabase,getSession}}) => {
@@ -10,7 +11,7 @@ export const load : PageServerLoad = async ({  locals: {supabase,getSession}}) =
   const session = await getSession()
   
   if(!session){
-    redirect(303, "/")
+    redirect(303, allNav.Dashboard.href)
   }
   
   const {data: profile} = await supabase

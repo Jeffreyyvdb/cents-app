@@ -12,6 +12,7 @@
 	import MainNav from './nav/main-nav.svelte';
 	import MobileNav from './nav/mobile-nav.svelte';
 	import { Button, buttonVariants } from './ui/button';
+	import { allNav } from '$lib/types/nav';
 
 	let loading = false;
 	let downloadedAvatarUrl = '';
@@ -77,8 +78,8 @@
 						</Avatar.Root>
 					</a>
 				{:else}
-					<Button href="/signin" variant="ghost" class="hidden md:block">Sign in</Button>
-					<Button href="/signup" variant="ghost" class="hidden md:block">Sign up</Button>
+					<Button href={allNav.SignIn.href} variant="ghost" class="hidden md:block">{allNav.SignIn.title}</Button>
+					<Button href={allNav.SignUp.href} variant="ghost" class="hidden md:block">{allNav.SignUp.title}</Button>
 				{/if}
 			</nav>
 		</div>

@@ -3,6 +3,7 @@
 	import { siteConfig } from '$lib/config/site';
 	import { cn } from '$lib/utils';
 	import { Icons } from '$lib/components/icons';
+	import { mainNav } from '$lib/types/nav';
 </script>
 
 <div class="mr-4 hidden md:flex">
@@ -14,32 +15,36 @@
 	</a>
 	<nav class="flex items-center gap-6 text-sm">
 		<a
-			href="/"
+			href={mainNav.Dashboard.href}
 			class={cn(
 				'transition-colors hover:text-foreground/80',
-				$page.url.pathname === '/' ? 'text-foreground' : 'text-foreground/60'
+				$page.url.pathname === mainNav.Dashboard.href ? 'text-foreground' : 'text-foreground/60'
 			)}
 		>
-			Dashboard
+			{mainNav.Dashboard.title}
 		</a>
 
 		<a
-			href="/wallets"
+			href={mainNav.Wallets.href}
 			class={cn(
 				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/wallets') ? 'text-foreground' : 'text-foreground/60'
+				$page.url.pathname.startsWith(mainNav.Wallets.href)
+					? 'text-foreground'
+					: 'text-foreground/60'
 			)}
 		>
-			Wallets
+			{mainNav.Wallets.title}
 		</a>
 		<a
-			href="/my/settings/profile"
+			href={mainNav.Settings.href}
 			class={cn(
 				'transition-colors hover:text-foreground/80',
-				$page.url.pathname.startsWith('/settings') ? 'text-foreground' : 'text-foreground/60'
+				$page.url.pathname.startsWith(mainNav.Settings.href)
+					? 'text-foreground'
+					: 'text-foreground/60'
 			)}
 		>
-			Settings
+			{mainNav.Settings.title}
 		</a>
 	</nav>
 </div>

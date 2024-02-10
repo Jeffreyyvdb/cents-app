@@ -1,13 +1,13 @@
 export const siteConfig = {
 	name: '¢ents',
-	url: 'https://shadcn-svelte.com',
-	ogImage: 'https://shadcn-svelte.com/og.png',
-	description: 'Beautifully designed components built with Melt UI and Tailwind CSS.',
+	url: '',
+	ogImage: '',
+	description: '',
 	links: {
 		twitter: 'https://twitter.com/Jeffreyyvdb',
-		github: 'https://github.com/Jeffreyyvdb/shadcn-app'
+		github: 'https://github.com/Jeffreyyvdb/cents-app'
 	},
-	keywords: `shadcn,Svelte,SvelteKit,Svelte Components,TailwindCSS,Melt UI,Bit UI`
+	keywords: ``
 };
 
 export type SiteConfig = typeof siteConfig;

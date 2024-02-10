@@ -4,9 +4,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import { onMount } from 'svelte';
 	import { cn } from '$lib/utils';
-	import { docsConfig } from '$lib/config/docs';
 	import { goto } from '$app/navigation';
 	import { resetMode, setMode } from 'mode-watcher';
+	import { mainNavItems } from '$lib/types/nav';
 
 	let open = false;
 
@@ -29,8 +29,6 @@
 		cmd();
 	}
 
-	const mainNav = docsConfig.mainNav.filter((item) => !item.external);
-	const sidebarNav = docsConfig.sidebarNav;
 </script>
 
 <Button
@@ -52,7 +50,7 @@
 	<Command.List>
 		<Command.Empty>No results found.</Command.Empty>
 		<Command.Group heading="Links">
-			{#each mainNav as navItem}
+			{#each mainNavItems as navItem}
 				<Command.Item
 					value={navItem.title}
 					onSelect={() =>
@@ -65,24 +63,6 @@
 				</Command.Item>
 			{/each}
 		</Command.Group>
-		{#each sidebarNav as group}
-			<Command.Group heading={group.title}>
-				{#each group.items as navItem}
-					<Command.Item
-						value={navItem.title}
-						onSelect={() =>
-							runCommand(() => {
-								navItem.href && goto(navItem.href);
-							})}
-					>
-						<div class="mr-2 flex h-4 w-4 items-center justify-center">
-							<Circle class="h-3 w-3" />
-						</div>
-						{navItem.title}
-					</Command.Item>
-				{/each}
-			</Command.Group>
-		{/each}
 		<Command.Separator />
 		<Command.Group heading="Theme">
 			<Command.Item value="light" onSelect={() => runCommand(() => setMode('light'))}>

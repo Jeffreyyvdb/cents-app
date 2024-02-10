@@ -3,6 +3,7 @@ import { fail , redirect} from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms/server";
 import {  signInSchema } from "./schema";
 import { AuthApiError } from "@supabase/supabase-js";
+import { allNav } from "$lib/types/nav";
 
 export const load: PageServerLoad = async (event) => {
   const form = await superValidate(event, signInSchema)
@@ -32,6 +33,6 @@ export const actions: Actions = {
         return fail(500, { message: error.message, succes: false, email, form})
       }
 
-      throw redirect(303, "/")
+      throw redirect(303, allNav.Dashboard.href)
   }
 }

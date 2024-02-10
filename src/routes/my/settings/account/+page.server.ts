@@ -3,11 +3,12 @@ import type {PageServerLoad} from "./$types";
 import {accountFormSchema} from "./account-form.svelte";
 import {fail, type Actions} from "@sveltejs/kit";
 import {redirect} from "@sveltejs/kit";
+import { allNav } from "$lib/types/nav";
 
 export const load: PageServerLoad = async () => {
 
     // Redirect for now until this page is developed
-    redirect(307, "/my/settings/profile")
+    redirect(307, allNav.Settings.href)
     return {
         form: await superValidate(accountFormSchema),
     };

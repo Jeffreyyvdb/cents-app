@@ -5,16 +5,18 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sheet from '$lib/components/ui/sheet';
-	import { docsConfig } from '$lib/config/docs';
 	import { siteConfig } from '$lib/config/site';
 	import { downloadImageFromSb } from '$lib/supabase';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Icons } from '../icons';
 	import MobileLink from './mobile-link.svelte';
+	import { allNav, allNavItems, mainNavItems, sideNav, sideNavItems } from '$lib/types/nav';
 
 	let open = false;
 	let loading = false;
 	let downloadedAvatarUrl = '';
+
+
 
 	let { profile, session } = $page.data;
 	$: ({ profile, session } = $page.data);
@@ -45,14 +47,14 @@
 		</Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="left" class="pr-0">
-		<MobileLink href="/" class="flex items-center" bind:open>
+		<MobileLink href={sideNav.Dashboard.href} class="flex items-center" bind:open>
 			<Icons.logo class="mr-2 h-4 w-4" />
 			<span class="font-title text-2xl">{siteConfig.name}</span>
 		</MobileLink>
 		<div class="my-4 h-[calc(100vh-8rem)] overflow-auto px-6 pb-10">
 			<div class="flex flex-col space-y-3">
 				{#if session}
-					<a href="/my/settings/profile" on:click={() => (open = !open)} class="flex-start flex">
+					<a href={allNav.Settings.href} on:click={() => (open = !open)} class="flex-start flex">
 						<Avatar.Root>
 							<Avatar.Image src={downloadedAvatarUrl} class="object-cover" alt="Account" />
 							<Avatar.Fallback>NT</Avatar.Fallback>
@@ -60,18 +62,18 @@
 						<span class="ml-4 leading-[40px]">{profile.full_name}</span>
 					</a>
 
-					<form method="POST" action="/signout" use:enhance={handleSignOut}>
-						<Button type="submit" disabled={loading} class="w-full">Sign Out</Button>
+					<form method="POST" action={allNav.SignOut.href} use:enhance={handleSignOut}>
+						<Button type="submit" disabled={loading} class="w-full">{allNav.SignOut.title}</Button>
 					</form>
 				{:else}
-					<Button href="/signin" on:click={() => (open = !open)}>Sign in</Button>
-					<Button href="/signup" variant="secondary" on:click={() => (open = !open)}>Sign Up</Button
+					<Button href={allNav.SignIn.href} on:click={() => (open = !open)}>{allNav.SignIn.title}</Button>
+					<Button href={allNav.SignUp.href} variant="secondary" on:click={() => (open = !open)}>{allNav.SignUp.title}</Button
 					>
 				{/if}
 
 				<Separator class="my-4" />
 
-				{#each docsConfig.mainNav as navItem, index (navItem + index.toString())}
+				{#each mainNavItems as navItem, index (navItem + index.toString())}
 					{#if navItem.href}
 						<MobileLink href={navItem.href} bind:open class="text-foreground">
 							{navItem.title}

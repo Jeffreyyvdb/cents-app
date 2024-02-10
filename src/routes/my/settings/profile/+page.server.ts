@@ -2,13 +2,14 @@ import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/server';
 import { profileFormSchema } from './schema';
 import { fail, type Actions, redirect } from '@sveltejs/kit';
+import { allNav } from '$lib/types/nav';
 
 export const load: PageServerLoad = async (event) => {
 	const form = await superValidate(profileFormSchema);
 	const session = await event.locals.getSession();
 
 	if (!session) {
-		redirect(303, '/');
+		redirect(303, allNav.Dashboard.href);
 	}
 
 	const { data: profile } = await event.locals.supabase

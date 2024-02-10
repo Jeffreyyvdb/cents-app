@@ -1,8 +1,8 @@
 import { dev } from '$app/environment';
-export const BASE_URL = dev ? 'http://localhost:5173' : 'https://shadcn.jeffreyyvdb.dev/';
+export const BASE_URL = dev ? 'http://localhost:5173' : 'https://cents.jeffreyyvdb.dev/';
 export const APP_NAME = 'Jeffreyyvdb.dev';
 export const CONTACT_EMAIL = 'yourname@email.com';
-export const DOMAIN = 'shadcn.jeffreyyvdb.dev';
+export const DOMAIN = 'cents.jeffreyyvdb.dev';
 /* WARNING!!! TERMS AND CONDITIONS AND PRIVACY POLICY 
 WERE CREATED BY CHATGPT AS AN EXAMPLE ONLY. 
 CONSULT A LAWYER AND DEVELOP YOUR OWN TERMS AND PRIVACY POLICY!!! */

@@ -1,3 +1,4 @@
+import { allNav } from "$lib/types/nav.js";
 import { redirect } from "@sveltejs/kit";
 
 
@@ -6,6 +7,6 @@ export const actions  = {
         const session = await getSession();
         if(session){
             await supabase.auth.signOut()
-            throw redirect(303, "/signin")
+            throw redirect(303, allNav.SignIn.href)
         }
     }}
