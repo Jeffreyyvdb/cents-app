@@ -5,84 +5,19 @@
 	import * as Table from '$lib/components/ui/table';
 	import { siteConfig } from '$lib/config/site';
 	import { onMount } from 'svelte';
-	import dataSet from './market-price.json';
+	import { getHistoricalPrices } from '$lib/supabase';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 
 	export let data;
 	let { supabase } = data;
 	$: ({ supabase } = data);
+	let chartIsLoading = true;
 
 	// Transform "x" values to JavaScript Date objects
-	const formattedData = dataSet.values.map((item) => ({
-		x: new Date(item.x * 1000), // Assuming the timestamp is in seconds
-		y: item.y
-	}));
-
-	let options = {
-		yaxis: { show: false },
-		chart: {
-			toolbar: { show: false, tools: { download: false } },
-			type: 'area',
-			height: 350
-		},
-		title: {
-			text: 'Bitcoin price / last 30 days',
-			align: 'left',
-			margin: 10,
-			offsetX: 0,
-			offsetY: 0,
-			floating: false,
-			style: {
-				fontSize: '16px',
-				color: '#213043'
-			}
-		},
-
-		toolbar: {
-			show: false,
-			tools: {
-				download: false,
-				selection: false,
-				zoom: false,
-				zoomin: false,
-				zoomout: false,
-				pan: false,
-				reset: false
-			}
-		},
-		dataLabels: {
-			enabled: false
-		},
-		tooltip: {
-			x: {
-				format: 'dd MMM yyyy'
-			},
-			fixed: {
-				enabled: false,
-				position: 'topRight'
-			},
-			theme: 'dark'
-		},
-		fill: {
-			opacity: 1,
-			type: 'gradient'
-		},
-		colors: ['#22c55e'],
-		series: [
-			{
-				name: 'BTC (USD)',
-				data: formattedData
-			}
-		],
-		xaxis: {
-			type: 'datetime',
-			axisBorder: {
-				show: false
-			},
-			axisTicks: {
-				show: false
-			}
-		}
-	};
+	// const formattedData = dataSet.values.map((item) => ({
+	// 	x: new Date(item.x * 1000), // Assuming the timestamp is in seconds
+	// 	y: item.y
+	// }));
 
 	let chart: any;
 
@@ -122,6 +57,61 @@
 	onMount(async () => {
 		const { default: ApexCharts } = await import('apexcharts');
 
+		const januari2008 = new Date(2008, 0, 1);
+		const januari2024 = new Date(2024, 0, 1);
+
+		const prices = await getHistoricalPrices('BTC', januari2008, januari2024);
+
+		let options = {
+			grid: { show: false },
+			fontFamily: 'inherit',
+			foreColor: 'inherit',
+			width: '100%',
+			height: '100%',
+			type: 'area',
+			sparkline: {
+				enabled: true
+			},
+			yaxis: { show: false },
+			chart: {
+				animations: { enabled: false },
+				toolbar: { show: false, tools: { download: false } },
+				type: 'area',
+				zoom: { enabled: false }
+			},
+			dataLabels: {
+				enabled: false
+			},
+			tooltip: {
+				x: {
+					format: 'dd MMM yyyy'
+				},
+
+				theme: 'dark'
+			},
+			fill: {
+				opacity: 1,
+				type: 'gradient'
+			},
+			colors: ['#22c55e'],
+			series: [
+				{
+					name: 'BTC (USD)',
+					data: prices?.map((data) => ({ x: data.date, y: data.close }))
+				}
+			],
+			xaxis: {
+				type: 'datetime',
+				axisBorder: {
+					show: false
+				},
+				axisTicks: {
+					show: false
+				}
+			}
+		};
+
+		chartIsLoading = false;
 		// Create a new instance of ApexCharts
 		chart = new ApexCharts(chart, options);
 
@@ -145,9 +135,11 @@
 	</section>
 
 	<!-- Chart -->
-	<section class="my-2 justify-center overflow-hidden w-full h-[350px]">
-		<Card.Root class="p-2">
-			<div bind:this={chart} class=""></div>
+	<section class="flex items-center justify-center">
+		<Card.Root class="w-full flex-col md:w-2/4">
+			<div class="aspect-[16/10] w-full">
+				<div bind:this={chart} class="h-full w-full flex-auto"></div>
+			</div>
 		</Card.Root>
 	</section>
 	<!-- Recent transactions -->

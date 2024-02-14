@@ -1,7 +1,11 @@
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { createBrowserClient } from '@supabase/ssr';
+import type { Database } from './types/database.types';
 
-export const supabaseClient = createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+export const supabaseClient = createBrowserClient<Database>(
+	PUBLIC_SUPABASE_URL,
+	PUBLIC_SUPABASE_ANON_KEY
+);
 
 export const downloadImageFromSb = async (path: string): Promise<string> => {
 	try {
@@ -36,4 +40,20 @@ export const uploadImageToSb = async (files: FileList, userId: string): Promise<
 	}
 
 	return filePath;
+};
+
+export const getHistoricalPrices = async (currency: string, start: Date, end: Date) => {
+	const { data, error } = await supabaseClient
+		.from('historical_prices')
+		.select('date, open, high, low, close, adj_close, volume, currency')
+		.eq('currency', currency)
+		.gte('date', start.toISOString())
+		.lte('date', end.toISOString());
+
+	if (error) {
+		console.error(error.message);
+	}
+
+	console.log(`getHistoricalPrices returned: ${data?.length} rows.`);
+	return data;
 };

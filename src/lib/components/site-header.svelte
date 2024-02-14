@@ -78,8 +78,12 @@
 						</Avatar.Root>
 					</a>
 				{:else}
-					<Button href={allNav.SignIn.href} variant="ghost" class="hidden md:block">{allNav.SignIn.title}</Button>
-					<Button href={allNav.SignUp.href} variant="ghost" class="hidden md:block">{allNav.SignUp.title}</Button>
+					<Button href={allNav.SignIn.href} variant="ghost" class="hidden md:block"
+						>{allNav.SignIn.title}</Button
+					>
+					<Button href={allNav.SignUp.href} variant="ghost" class="hidden md:block"
+						>{allNav.SignUp.title}</Button
+					>
 				{/if}
 			</nav>
 		</div>

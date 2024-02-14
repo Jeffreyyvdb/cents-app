@@ -9,7 +9,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"update-types": "npx supabase gen types typescript --local --schema public > src/lib/types/database.types.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
@@ -45,6 +46,7 @@
 		"@vercel/speed-insights": "^1.0.9",
 		"apexcharts": "^3.45.2",
 		"bits-ui": "^0.16.0",
+		"chart.js": "^4.4.1",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.13",
 		"embla-carousel-svelte": "^8.0.0-rc22",
