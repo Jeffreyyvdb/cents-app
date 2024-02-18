@@ -1,4 +1,4 @@
-export { default as Input } from './components/Input.svelte';
+export { default as Input } from './components/input.svelte';
 export { default as CommandMenu } from './components/command-menu.svelte';
 export { default as MainNav } from './components/main-nav.svelte';
 export { default as MobileLink } from './components/mobile-link.svelte';
