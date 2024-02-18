@@ -5,7 +5,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import { siteConfig } from '$lib/config/site';
 	import { onMount } from 'svelte';
-	import { getHistoricalPrices } from '$lib/supabase';
+	import { getHistoricalPrices } from '$lib/services/supabaseService.js';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 
 	export let data;

@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import ModeToggle from '$lib/components/move-toggle.svelte';
+	import { Icons } from '$lib/components/icons';
 	import * as Avatar from '$lib/components/ui/avatar';
+	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { siteConfig } from '$lib/config/site';
-	import { downloadImageFromSb } from '$lib/supabase';
-	import { cn } from '$lib/utils';
+	import { downloadImageFromSb } from '$lib/services/supabaseService';
+	import { allNav } from '$lib/types/nav';
+	import { cn } from '$lib/utils/index';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import CommandMenu from './command-menu.svelte';
-	import { Icons } from './icons';
-	import MainNav from './nav/main-nav.svelte';
-	import MobileNav from './nav/mobile-nav.svelte';
-	import { Button, buttonVariants } from './ui/button';
-	import { allNav } from '$lib/types/nav';
+	import MainNav from './main-nav.svelte';
+	import MobileNav from './mobile-nav.svelte';
+	import ModeToggle from './mode-toggle.svelte';
 
 	let loading = false;
 	let downloadedAvatarUrl = '';

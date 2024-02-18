@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import * as Form from '$lib/components/ui/form';
-	import { downloadImageFromSb, uploadImageToSb } from '$lib/supabase';
+	import { downloadImageFromSb, uploadImageToSb } from '$lib/services/supabaseService';
 	import { generateDefaultAvatarUrl } from '$lib/utils';
 	import type { FormOptions } from 'formsnap';
 	import { Reload } from 'radix-icons-svelte';

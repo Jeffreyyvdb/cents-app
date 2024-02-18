@@ -1,22 +1,20 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import { Icons } from '$lib/components/icons';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { siteConfig } from '$lib/config/site';
-	import { downloadImageFromSb } from '$lib/supabase';
+	import { downloadImageFromSb } from '$lib/services/supabaseService';
+	import { allNav, mainNavItems, sideNav } from '$lib/types/nav';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { Icons } from '../icons';
 	import MobileLink from './mobile-link.svelte';
-	import { allNav, allNavItems, mainNavItems, sideNav, sideNavItems } from '$lib/types/nav';
 
 	let open = false;
 	let loading = false;
 	let downloadedAvatarUrl = '';
-
-
 
 	let { profile, session } = $page.data;
 	$: ({ profile, session } = $page.data);
@@ -66,8 +64,11 @@
 						<Button type="submit" disabled={loading} class="w-full">{allNav.SignOut.title}</Button>
 					</form>
 				{:else}
-					<Button href={allNav.SignIn.href} on:click={() => (open = !open)}>{allNav.SignIn.title}</Button>
-					<Button href={allNav.SignUp.href} variant="secondary" on:click={() => (open = !open)}>{allNav.SignUp.title}</Button
+					<Button href={allNav.SignIn.href} on:click={() => (open = !open)}
+						>{allNav.SignIn.title}</Button
+					>
+					<Button href={allNav.SignUp.href} variant="secondary" on:click={() => (open = !open)}
+						>{allNav.SignUp.title}</Button
 					>
 				{/if}
 

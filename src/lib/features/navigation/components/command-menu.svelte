@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Circle, File, Laptop, Moon, Sun } from 'radix-icons-svelte';
-	import * as Command from '$lib/components/ui/command';
-	import { Button } from '$lib/components/ui/button';
-	import { onMount } from 'svelte';
-	import { cn } from '$lib/utils';
 	import { goto } from '$app/navigation';
-	import { resetMode, setMode } from 'mode-watcher';
+	import { Button } from '$lib/components/ui/button';
+	import * as Command from '$lib/components/ui/command';
 	import { mainNavItems } from '$lib/types/nav';
+	import { cn } from '$lib/utils';
+	import { resetMode, setMode } from 'mode-watcher';
+	import { File, Laptop, Moon, Sun } from 'radix-icons-svelte';
+	import { onMount } from 'svelte';
 
 	let open = false;
 
@@ -28,7 +28,6 @@
 		open = false;
 		cmd();
 	}
-
 </script>
 
 <Button

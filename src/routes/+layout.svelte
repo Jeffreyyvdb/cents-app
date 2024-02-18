@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { ModeWatcher } from 'mode-watcher';
 	import '../app.pcss';
-	import SiteHeader from '$lib/components/site-header.svelte';
-	import SiteFooter from '$lib/components/site-footer.svelte';
+	import {SiteHeader, SiteFooter} from '$lib/features/navigation';
 	import { dev } from '$app/environment';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { inject } from '@vercel/analytics';
 	import { onMount } from 'svelte';
-	import { supabaseClient } from '$lib/supabase';
+	import { supabaseClient } from '$lib/services/supabaseService';
 	import { invalidateAll } from '$app/navigation';
 	import { Toaster } from '$lib/components/ui/sonner';
 

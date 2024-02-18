@@ -1,6 +1,6 @@
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { createBrowserClient } from '@supabase/ssr';
-import type { Database } from './types/database.types';
+import type { Database } from '../types/database.types';
 
 export const supabaseClient = createBrowserClient<Database>(
 	PUBLIC_SUPABASE_URL,
